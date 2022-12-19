@@ -15,13 +15,6 @@ public class FirstOrderStepPage extends BasePage {
         return this;
     }
 
-    @Step("Fill the form by existing email {existingEmail}")
-    public FirstOrderStepPage fillFormExistingEmail(String phone, String existingEmail) {
-        $("#customer_form_phone").sendKeys(phone);
-        $("#customer_form_email").sendKeys(existingEmail);
-        return this;
-    }
-
     @Step("Fill the form by phone {phone}")
     public FirstOrderStepPage fillFormExistingPhone(String phone) {
         $("#customer_form_phone").sendKeys(phone);

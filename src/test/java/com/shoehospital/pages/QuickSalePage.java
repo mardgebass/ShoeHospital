@@ -14,9 +14,9 @@ public class QuickSalePage extends BasePage{
         return this;
     }
 
-    @Step("Check alert {paymentCompleted}")
-    public QuickSalePage checkAlert(String paymentCompleted){
-        $("#toast-container").shouldHave(Condition.text(paymentCompleted));
+    @Step("Check alert {payment completed}")
+    public QuickSalePage checkAlert(String paymentPickedUp){
+        $("#toast-container").shouldHave(Condition.text(paymentPickedUp));
         return this;
     }
 
@@ -48,8 +48,9 @@ public class QuickSalePage extends BasePage{
 
     @Step("Pay by Card")
     public QuickSalePage payByCard () {
+        int row = (int)(Math.random() * 5);
         $(byText("Credit Card")).click();
-        $$x(".//label[@class='radio me-3']").get(0).click();
+        $$x(".//label[@class='radio me-3']").get(row).click();
         $("#card-pay-received-btn").click();
         return this;
     }

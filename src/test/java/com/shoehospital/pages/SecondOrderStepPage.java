@@ -2,6 +2,7 @@ package com.shoehospital.pages;
 
 import io.qameta.allure.Step;
 
+import static com.codeborne.selenide.Selectors.byAttribute;
 import static com.codeborne.selenide.Selenide.*;
 import static org.openqa.selenium.Keys.ARROW_RIGHT;
 
@@ -22,26 +23,20 @@ public class SecondOrderStepPage extends BasePage{
     @Step("Click CWR")
     public SecondOrderStepPage clickCWR(){
         sleep(1000);
-        $x(".//tr[1]/td[3]/div/input").click();
+        $(byAttribute("data-attr","cwr")).$x(".//input[@class='form-check-input h-25px w-25px']").click();
         return this;
     }
 
     @Step("Add price {price}")
     public SecondOrderStepPage addPrice(String price){
-        $x(".//tr[1]/td[4]/div/input").sendKeys(ARROW_RIGHT);
-        $x(".//tr[1]/td[4]/div/input").sendKeys(price);
-        return this;
-    }
-
-    @Step("Click date")
-    public SecondOrderStepPage clickDate() {
-        $x(".//input[@class='form-control flatpickr-input']").click();
+        $(byAttribute("data-attr","est_cost")).$x(".//input[@class='form-control formatCost']").sendKeys(ARROW_RIGHT, price);
         return this;
     }
 
     @Step("Add date")
     public SecondOrderStepPage addDate() {
-        $x(".//span[@class='flatpickr-day today']").click();
+        $x(".//input[@class='form-control flatpickr-input']").click();
+        $x(".//div[@class='flatpickr-calendar animate open arrowTop arrowLeft']").$x(".//span[@class='flatpickr-day today']").click();
         return this;
     }
 

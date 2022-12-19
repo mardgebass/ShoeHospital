@@ -4,25 +4,39 @@ import com.codeborne.selenide.Condition;
 import io.qameta.allure.Step;
 
 import static com.codeborne.selenide.Selectors.byText;
-import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$x;
 
 public class TicketPage extends BasePage {
 
-    @Step("Click Mark Ticket as Ready For Pick-Up")
+    @Step("Click Mark Ticket as Pending Pick Up")
     public TicketPage clickRFPU() {
-        $(byText("Mark Ticket as Ready For Pick-Up")).click();
+        $(byText("Mark Ticket as Pending Pick Up")).click();
         return this;
     }
 
-    @Step("Click Mark Ticket as Complete")
-    public TicketPage clickComplete() {
-        $(byText("Mark Ticket as Complete")).click();
+    @Step("Click Delete Ticket")
+    public TicketPage clickDelete() {
+        $x(".//a[@class='btn btn-danger w-100 mt-5']").click();
         return this;
     }
 
-    @Step("Check Status Completed")
-    public TicketPage checkStatusCompleted() {
-        $x(".//div[@class=' d-flex align-items-center flex-row justify-content-end me-5']").shouldHave(Condition.text("Completed"));
+    @Step("Click Confirm Deletion")
+    public TicketPage clickConfirmDeletion() {
+        $x(".//a[@class='btn btn-danger w-100px']").click();
+        return this;
+    }
+
+
+    @Step("Click Mark Ticket as Picked Up")
+    public TicketPage clickPickedUp() {
+        $(byText("Mark Ticket as Picked Up")).click();
+        return this;
+    }
+
+    @Step("Check Status Picked up")
+    public TicketPage checkStatusPickedUp() {
+        $x(".//div[@class=' d-flex align-items-center flex-row justify-content-end me-5']").shouldHave(Condition.text("Picked up"));
         return this;
     }
 
@@ -44,15 +58,15 @@ public class TicketPage extends BasePage {
         return this;
     }
 
-    @Step("Check text \"Ticket marked: Ready for Pick-Up\" in Audit History")
+    @Step("Check text \"Ticket marked: Pending Pick Up\" in Audit History")
     public TicketPage checkRFPUHistory() {
-        $("#table_body").shouldHave(Condition.text("Ticket marked: Ready for Pick-Up"));
+        $("#table_body").shouldHave(Condition.text("Ticket marked: Pending Pick Up"));
         return this;
     }
 
-    @Step("Check text \"Ticket closed: Completed\" in Audit History")
-    public TicketPage checkCompletedHistory() {
-        $("#table_body").shouldHave(Condition.text("Ticket closed: Completed"));
+    @Step("Check text \"Ticket closed: Picked up\" in Audit History")
+    public TicketPage checkPickedUpHistory() {
+        $("#table_body").shouldHave(Condition.text("Ticket closed: Picked up"));
         return this;
     }
 
@@ -64,7 +78,7 @@ public class TicketPage extends BasePage {
 
     @Step("Check Status RFPU")
     public TicketPage checkStatusRFPU() {
-        $x(".//div[@class=' d-flex align-items-center flex-row justify-content-end me-5']").shouldHave(Condition.text("Ready for Pick-Up"));
+        $x(".//div[@class=' d-flex align-items-center flex-row justify-content-end me-5']").shouldHave(Condition.text("Pending Pick Up"));
         return this;
     }
 
@@ -74,4 +88,8 @@ public class TicketPage extends BasePage {
         return this;
     }
 
+    public TicketPage clickProceedToPayment() {
+        $x(".//a[@class='btn btn-light-success w-100 mb-5']").click();
+        return this;
+    }
 }

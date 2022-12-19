@@ -4,7 +4,7 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
 
-import static com.codeborne.selenide.Selectors.byText;
+import static com.codeborne.selenide.Selectors.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$x;
 
@@ -20,10 +20,23 @@ public class Header {
         return new MainPage();
     }
 
+    @Step("Click search")
+    public MainPage clickSearch() {
+        $("#kt_header_search_toggle").click();
+        return new MainPage();
+    }
+
     @Step("Navigate to New Order")
     public MainPage clickNewOrder() {
         navigateTo().click();
         $(byText("New Order")).click();
+        return new MainPage();
+    }
+
+    @Step("Navigate to Store Management")
+    public MainPage clickStoreManagement() {
+        navigateTo().click();
+        $(byText("Store Management")).click();
         return new MainPage();
     }
 

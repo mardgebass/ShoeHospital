@@ -3,13 +3,16 @@ package com.shoehospital.tests;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.WebDriverRunner;
+import com.shoehospital.DataBaseRepository;
 import com.shoehospital.config.TestConfig;
 import com.shoehospital.pages.LoginPage;
 import com.shoehospital.pages.MainPage;
-import com.shoehospital.DataBaseRepository;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Selenide.page;
 

@@ -19,7 +19,7 @@ public class QuickSaleTests extends DataBaseRepository {
 
     @Test
     @Severity(SeverityLevel.CRITICAL)
-    @DisplayName("Sale - Cash")
+    @DisplayName("Sale paid by cash")
     public void saleCash() {
         page(MainPage.class)
                 .getHeader()
@@ -39,7 +39,7 @@ public class QuickSaleTests extends DataBaseRepository {
 
     @Test
     @Severity(SeverityLevel.CRITICAL)
-    @DisplayName("Sale - Card")
+    @DisplayName("Sale paid by card")
     public void saleCard() {
         page(MainPage.class)
                 .getHeader()
@@ -59,7 +59,7 @@ public class QuickSaleTests extends DataBaseRepository {
 
     @Test
     @Severity(SeverityLevel.CRITICAL)
-    @DisplayName("Sale - Check")
+    @DisplayName("Sale paid by check")
     public void saleCheck() {
         page(MainPage.class)
                 .getHeader()
