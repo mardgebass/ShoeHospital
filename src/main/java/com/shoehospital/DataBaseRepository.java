@@ -1,15 +1,16 @@
 package com.shoehospital;
 
+import com.shoehospital.config.TestConfigDB;
+
 import java.security.SecureRandom;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
-public class DataBaseRepository {
+import static java.lang.Double.parseDouble;
 
-    private static final String URL = "jdbc:mysql://XXX.XXX.XXX.XX:XXXX/app";
-    private static final String user = "app";
-    private static final String password = "XXXX";
+public class DataBaseRepository{
 
     String requestSku = "select b.barcode from stores_products s join barcodes b on s.product_id = b.product_id where store_id = 4 and hide = 0";
     String requestSum = "select s.sale_price from stores_products s join barcodes b on s.product_id = b.product_id where store_id = 4 and barcode = ";
@@ -24,25 +25,25 @@ public class DataBaseRepository {
     static String sku;
     static String sum;
     static String falseSku;
+    static String resultValue;
 
     SecureRandom random = new SecureRandom();
 
-    public String getSku() {
+    public String getBarcode(String request, String columnLabel) {
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            connection = DriverManager.getConnection(URL, user, password);
+            connection = DriverManager.getConnection(TestConfigDB.testConfig.url(), TestConfigDB.testConfig.user(), TestConfigDB.testConfig.password());
             statement = connection.createStatement();
-            resultSet = statement.executeQuery(requestSku);
+            resultSet = statement.executeQuery(request);
 
             List<String> barcodes = new ArrayList<>();
 
             while (resultSet.next()) {
-                barcodes.add(resultSet.getString("barcode"));
+                barcodes.add(resultSet.getString(columnLabel));
             }
 
-            row = random.nextInt(barcodes.size());
-            sku = barcodes.get(row);
+            resultValue = barcodes.get(random.nextInt(barcodes.size()));
 
         } catch (ClassNotFoundException | SQLException classNotFoundException) {
             classNotFoundException.printStackTrace();
@@ -54,61 +55,25 @@ public class DataBaseRepository {
                 throwable.printStackTrace();
             }
         }
+        return resultValue;
+    }
+
+    public String getSku() {
+        sku = getBarcode(requestSku, "barcode");
         return sku;
     }
 
+    public String getFalseSku() {
+        falseSku = getBarcode(requestNotAvailableSku, "barcode");
+        return falseSku;
+    }
+
     public String getSum() {
-
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            connection = DriverManager.getConnection(URL, user, password);
-            statement = connection.createStatement();
-            resultSet = statement.executeQuery(requestSum + sku);
-
-            while (resultSet.next()) {
-                sum = String.valueOf((resultSet.getDouble("sale_price"))*2);
-            }
-
-        } catch (ClassNotFoundException | SQLException classNotFoundException) {
-            classNotFoundException.printStackTrace();
-        } finally {
-            try {
-                connection.close();
-                statement.close();
-            } catch (SQLException throwable) {
-                throwable.printStackTrace();
-            }
-        }
+        resultValue = getBarcode(requestSum + sku, "sale_price");
+        sum = String.format(Locale.ENGLISH, "%(.2f",(parseDouble(resultValue))*2*1.0825);
         return sum;
     }
 
-    public String getFalseSku() {
-
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            connection = DriverManager.getConnection(URL, user, password);
-            statement = connection.createStatement();
-            resultSet = statement.executeQuery(requestNotAvailableSku);
-
-            List<String> barcodesFromOtherStore = new ArrayList<>();
-
-            while (resultSet.next()) {
-                barcodesFromOtherStore.add(resultSet.getString("barcode"));
-            }
-
-            falseSku = barcodesFromOtherStore.get(random.nextInt(barcodesFromOtherStore.size()));
-
-        } catch (ClassNotFoundException | SQLException classNotFoundException) {
-            classNotFoundException.printStackTrace();
-        } finally {
-            try {
-                connection.close();
-                statement.close();
-            } catch (SQLException throwable) {
-                throwable.printStackTrace();
-            }
-        }
-        return falseSku;
-    }
+//  sum = String.format(Locale.ENGLISH, "%(.2f",(resultSet.getDouble("sale_price"))*2*1.0825);
 
 }
