@@ -17,7 +17,7 @@ import org.junit.jupiter.api.Test;
 import static com.codeborne.selenide.Selenide.page;
 
 @DisplayName("Login")
-public class LoginTests extends DataBaseRepository {
+public class LoginTests {
 
     @AfterEach
     public void afterEach() {

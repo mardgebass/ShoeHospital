@@ -9,7 +9,6 @@ import static com.codeborne.selenide.Selenide.*;
 
 public class CartPage extends BasePage {
 
-
     @Step("Pay by Cash")
     public CartPage payByCash() {
         $(byText("Cash")).click();

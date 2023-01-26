@@ -19,7 +19,7 @@ public class RefundTests extends PaymentsPage {
 
     @Test
     @Severity(SeverityLevel.NORMAL)
-    @DisplayName("Make a refund by cash")
+    @DisplayName("Make a refund in cash")
     public void makeRefundByCash() {
         page(MainPage.class)
                 .getHeader()
@@ -39,16 +39,15 @@ public class RefundTests extends PaymentsPage {
                 .fillSalesTaxes()
                 .clickRefundType()
                 .clickCashRefundType()
-                .fillNote()
                 .clickSaveRefund()
                 .clickRefunds();
         page(RefundsPage.class)
-                .checkSumOfRefund(AMOUNT_REFUND);
+                .checkSumOfRefund(REFUND);
         page(MainPage.class)
                 .getHeader()
                 .clickDCR();
         page(DCRPage.class)
-                .checkRefundShoeRepair(AMOUNT_REFUND);
+                .checkRefundShoeRepair(REFUND);
     }
 
     @Test
@@ -67,22 +66,18 @@ public class RefundTests extends PaymentsPage {
                 .clickRefundButton()
                 .getAmountForRefund()
                 .fillAmountRefund()
-                .fillShoeRepair()
-                .fillOtherRetail()
-                .fillSundries()
-                .fillSalesTaxes()
+                .fillAllShoeRepair()
                 .clickRefundType()
                 .clickCardRefundType()
-                .fillNote()
                 .clickSaveRefund()
                 .clickRefunds();
         page(RefundsPage.class)
-                .checkSumOfRefund(AMOUNT_REFUND);
+                .checkSumOfRefund(REFUND);
         page(MainPage.class)
                 .getHeader()
                 .clickDCR();
         page(DCRPage.class)
-                .checkRefundShoeRepair(AMOUNT_REFUND);
+                .checkRefundShoeRepair(REFUND);
     }
 
     @Test
@@ -111,12 +106,12 @@ public class RefundTests extends PaymentsPage {
                 .clickSaveRefund()
                 .clickRefunds();
         page(RefundsPage.class)
-                .checkSumOfRefund(AMOUNT_REFUND);
+                .checkSumOfRefund(REFUND);
         page(MainPage.class)
                 .getHeader()
                 .clickDCR();
         page(DCRPage.class)
-                .checkRefundShoeRepair(AMOUNT_REFUND);
+                .checkRefundShoeRepair(REFUND);
     }
 
     @Test

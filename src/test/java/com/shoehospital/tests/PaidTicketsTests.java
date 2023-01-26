@@ -16,12 +16,12 @@ import static com.codeborne.selenide.Selenide.page;
 public class PaidTicketsTests {
 
     Faker faker = new Faker();
-    String price = faker.numerify("###");
-    String id = faker.numerify("100#####");
+    String price = faker.numerify("##");
+    String id = faker.numerify("10000###");
     String firstName = faker.name().firstName();
     String lastName = faker.name().lastName();
     String phone = faker.numerify("9#########");
-    String email = faker.bothify("??????##@me.com");
+    String email = faker.bothify("??????##@gmail.com");
 
 
     @Test
@@ -65,7 +65,7 @@ public class PaidTicketsTests {
 
     @Test
     @Severity(SeverityLevel.CRITICAL)
-    @DisplayName("Picked up ticket with prepayment by cash")
+    @DisplayName("Picked up ticket with prepayment in cash")
     public void completeOrderByCashTest() {
 
         page(FirstOrderStepPage.class)

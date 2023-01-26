@@ -11,7 +11,7 @@ public class AddStorePage extends BasePage{
     @Step("Choose region")
     public AddStorePage chooseRegion() {
         $x(".//span[@class='select2-selection select2-selection--single form-select']").click();
-        $x(".//span[@class='select2-container select2-container--bootstrap5 select2-container--open']").$(byText("El Paso")).click();
+        $x(".//span[@class='select2-container select2-container--bootstrap5 select2-container--open']").$(byText("Austin/San Antonio")).click();
         return this;
     }
 
@@ -23,7 +23,7 @@ public class AddStorePage extends BasePage{
         $("#store_form_phone").sendKeys("7654563333");
         $("#store_form_email").sendKeys(email);
         $("#store_form_serviceEmail").sendKeys("shop@austinshoehospital.com");
-        $("#store_form_city").sendKeys("El Paso");
+        $("#store_form_city").sendKeys("Austin/San Antonio");
         $("#store_form_state").sendKeys("Texas");
         $("#store_form_zipCode").sendKeys("45321");
         $("#store_form_taxRate").sendKeys("0.0825");

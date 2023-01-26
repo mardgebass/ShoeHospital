@@ -11,10 +11,10 @@ import static org.openqa.selenium.Keys.ARROW_LEFT;
 
 public class PaymentsPage extends BasePage {
 
-    private static String AMOUNT_RESIDUE;
-    private static String AMOUNT_AFTER_POINT;
-    private static String HALF_OF_REFUND;
-    public static String AMOUNT_REFUND;
+    private static String RESIDUE;
+    private static String AFTER_POINT;
+    private static String HALF_REFUND;
+    public static String REFUND;
 
     @Step("Click Refund button")
     public PaymentsPage clickRefundButton() {
@@ -28,19 +28,19 @@ public class PaymentsPage extends BasePage {
         return new PaymentsPage();
     }
 
-    @Step("Click Cash Refund type")
+    @Step("Click Cash type")
     public PaymentsPage clickCashRefundType() {
         $x(".//span[@class='select2-container select2-container--bootstrap5 select2-container--open']").$(byText("Cash")).click();
         return new PaymentsPage();
     }
 
-    @Step("Click Cash Refund type")
+    @Step("Click Cash type")
     public PaymentsPage clickCardRefundType() {
         $x(".//span[@class='select2-container select2-container--bootstrap5 select2-container--open']").$(byText("Card")).click();
         return new PaymentsPage();
     }
 
-    @Step("Click Cash Refund type")
+    @Step("Click Check type")
     public PaymentsPage clickCheckRefundType() {
         $x(".//span[@class='select2-container select2-container--bootstrap5 select2-container--open']").$(byText("Check")).click();
         return new PaymentsPage();
@@ -48,18 +48,18 @@ public class PaymentsPage extends BasePage {
 
     @Step("Get amount for refund")
     public PaymentsPage getAmountForRefund() {
-        String str = $x(".//span[@class='text-muted fw-bold fs-5']").innerText();
-        AMOUNT_REFUND = str.substring(7,str.indexOf(")"));
-        AMOUNT_AFTER_POINT = "0" + str.substring(str.indexOf("."),str.indexOf(")"));
+        String amount = $x(".//span[@class='text-muted fw-bold fs-5']").innerText();
+        REFUND = amount.substring(7,amount.indexOf(")"));
+        AFTER_POINT = "0" + amount.substring(amount.indexOf("."),amount.indexOf(")"));
 
-        int a = parseInt(str.substring(7,str.indexOf(".")));
+        int a = parseInt(amount.substring(7,amount.indexOf(".")));
 
         if (a % 2 == 0) {
-            HALF_OF_REFUND = String.valueOf(a / 2);
-            AMOUNT_RESIDUE = "0";
+            HALF_REFUND = String.valueOf(a / 2);
+            RESIDUE = "0";
         } else {
-            HALF_OF_REFUND = String.valueOf((a - 1) / 2);
-            AMOUNT_RESIDUE = "1";
+            HALF_REFUND = String.valueOf((a - 1) / 2);
+            RESIDUE = "1";
         }
 
         return new PaymentsPage();
@@ -67,37 +67,43 @@ public class PaymentsPage extends BasePage {
 
     @Step("Fill Amount")
     public PaymentsPage fillAmountRefund() {
-        $(byName("refund_create_form[totalAmount]")).sendKeys(ARROW_LEFT, ARROW_LEFT, ARROW_LEFT, AMOUNT_REFUND);
+        $(byName("refund_create_form[totalAmount]")).sendKeys(ARROW_LEFT, ARROW_LEFT, ARROW_LEFT, REFUND);
         return new PaymentsPage();
     }
 
     @Step("Fill Shoe Repair")
     public PaymentsPage fillShoeRepair() {
-        $("#refund_create_form_shoeRepairAmount").sendKeys(ARROW_LEFT, ARROW_LEFT, ARROW_LEFT, AMOUNT_AFTER_POINT);
+        $("#refund_create_form_shoeRepairAmount").sendKeys(ARROW_LEFT, ARROW_LEFT, ARROW_LEFT, AFTER_POINT);
+        return new PaymentsPage();
+    }
+
+    @Step("Fill Shoe Repair")
+    public PaymentsPage fillAllShoeRepair() {
+        $("#refund_create_form_shoeRepairAmount").sendKeys(ARROW_LEFT, ARROW_LEFT, ARROW_LEFT, REFUND);
         return new PaymentsPage();
     }
 
     @Step("Fill Other Retail")
     public PaymentsPage fillOtherRetail() {
-        $("#refund_create_form_otherRetailAmount").sendKeys(ARROW_LEFT, ARROW_LEFT, ARROW_LEFT, AMOUNT_RESIDUE);
+        $("#refund_create_form_otherRetailAmount").sendKeys(ARROW_LEFT, ARROW_LEFT, ARROW_LEFT, RESIDUE);
         return new PaymentsPage();
     }
 
     @Step("Fill Other Retail")
     public PaymentsPage fillErrorOtherRetail() {
-        $("#refund_create_form_otherRetailAmount").sendKeys(ARROW_LEFT, ARROW_LEFT, ARROW_LEFT, "3");
+        $("#refund_create_form_otherRetailAmount").sendKeys(ARROW_LEFT, ARROW_LEFT, ARROW_LEFT, REFUND);
         return new PaymentsPage();
     }
 
     @Step("Fill Sundries")
     public PaymentsPage fillSundries() {
-        $("#refund_create_form_sundriesAmount").sendKeys(ARROW_LEFT, ARROW_LEFT, ARROW_LEFT, HALF_OF_REFUND);
+        $("#refund_create_form_sundriesAmount").sendKeys(ARROW_LEFT, ARROW_LEFT, ARROW_LEFT, HALF_REFUND);
         return new PaymentsPage();
     }
 
     @Step("Fill Sales Taxes")
     public PaymentsPage fillSalesTaxes() {
-        $("#refund_create_form_salesTaxes").sendKeys(ARROW_LEFT, ARROW_LEFT, ARROW_LEFT, HALF_OF_REFUND);
+        $("#refund_create_form_salesTaxes").sendKeys(ARROW_LEFT, ARROW_LEFT, ARROW_LEFT, HALF_REFUND);
         return new PaymentsPage();
     }
 

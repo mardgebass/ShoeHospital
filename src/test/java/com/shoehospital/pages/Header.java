@@ -40,6 +40,20 @@ public class Header {
         return new MainPage();
     }
 
+    @Step("Navigate to Store Management")
+    public MainPage clickInventoryManagement() {
+        navigateTo().click();
+        $(byText("Inventory Management")).click();
+        return new MainPage();
+    }
+
+    @Step("Navigate to Store Management")
+    public MainPage clickInventoryStore() {
+        navigateTo().click();
+        $(byText("Inventory Store")).click();
+        return new MainPage();
+    }
+
     @Step("Navigate to QuickSale")
     public MainPage clickQuickSale() {
         navigateTo().click();

@@ -19,7 +19,7 @@ public class QuickSaleTests extends DataBaseRepository {
 
     @Test
     @Severity(SeverityLevel.CRITICAL)
-    @DisplayName("Sale paid by cash")
+    @DisplayName("Sale paid in cash")
     public void saleCash() {
         page(MainPage.class)
                 .getHeader()

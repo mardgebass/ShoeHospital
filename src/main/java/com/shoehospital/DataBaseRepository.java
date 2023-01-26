@@ -12,15 +12,24 @@ import static java.lang.Double.parseDouble;
 
 public class DataBaseRepository{
 
-    String requestSku = "select b.barcode from stores_products s join barcodes b on s.product_id = b.product_id where store_id = 4 and hide = 0";
-    String requestSum = "select s.sale_price from stores_products s join barcodes b on s.product_id = b.product_id where store_id = 4 and barcode = ";
-    String requestNotAvailableSku = "SELECT b.barcode from product_region s LEFT OUTER JOIN stores_products p on s.product_id = p.product_id JOIN barcodes b on s.product_id = b.product_id WHERE region_id = 2 and store_id is null";
+    String requestSku =
+            "SELECT b.barcode " +
+            "FROM stores_products s JOIN barcodes b " +
+            "ON s.product_id = b.product_id " +
+            "WHERE store_id = 4 AND hide = 0";
+    String requestSum = "SELECT s.sale_price " +
+            "FROM stores_products s JOIN barcodes b " +
+            "ON s.product_id = b.product_id " +
+            "WHERE store_id = 4 AND barcode = ";
+    String requestNotAvailableSku = "SELECT b.barcode " +
+            "FROM product_region s LEFT OUTER JOIN stores_products p " +
+            "ON s.product_id = p.product_id " +
+            "JOIN barcodes b ON s.product_id = b.product_id " +
+            "WHERE region_id = 2 AND store_id is null";
 
     private static Connection connection;
     private static Statement statement;
     private static ResultSet resultSet;
-
-    int row;
 
     static String sku;
     static String sum;
@@ -29,7 +38,7 @@ public class DataBaseRepository{
 
     SecureRandom random = new SecureRandom();
 
-    public String getBarcode(String request, String columnLabel) {
+    public String getDataBaseValue(String request, String columnLabel) {
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -59,21 +68,19 @@ public class DataBaseRepository{
     }
 
     public String getSku() {
-        sku = getBarcode(requestSku, "barcode");
+        sku = getDataBaseValue(requestSku, "barcode");
         return sku;
     }
 
     public String getFalseSku() {
-        falseSku = getBarcode(requestNotAvailableSku, "barcode");
+        falseSku = getDataBaseValue(requestNotAvailableSku, "barcode");
         return falseSku;
     }
 
     public String getSum() {
-        resultValue = getBarcode(requestSum + sku, "sale_price");
+        resultValue = getDataBaseValue(requestSum + sku, "sale_price");
         sum = String.format(Locale.ENGLISH, "%(.2f",(parseDouble(resultValue))*2*1.0825);
         return sum;
     }
-
-//  sum = String.format(Locale.ENGLISH, "%(.2f",(resultSet.getDouble("sale_price"))*2*1.0825);
 
 }
