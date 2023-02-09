@@ -4,6 +4,7 @@ import io.qameta.allure.Step;
 
 import java.security.SecureRandom;
 
+import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
 import static org.openqa.selenium.Keys.ARROW_RIGHT;
 
@@ -49,10 +50,10 @@ public class CreateProductPage {
         return this;
     }
 
-    @Step("Select category")
+    @Step("Select region")
     public CreateProductPage selectRegion() {
         $x(".//span[@class='select2-selection select2-selection--multiple form-select']").click();
-        $$x(".//li[@class='select2-results__option select2-results__option--selectable']").get(random.nextInt(2)).click();
+        $("#select2-edit_product_form_regions-results").$(byText("Austin/San Antonio")).click();
         return this;
     }
 

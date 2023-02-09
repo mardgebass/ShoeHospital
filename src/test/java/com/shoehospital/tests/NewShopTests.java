@@ -19,10 +19,11 @@ public class NewShopTests {
 
     Faker faker = new Faker();
 
-    String name = faker.numerify("Austin ##");
-    String storeNumber = faker.numerify("2##");
-    String shortName = faker.bothify("SH##");
-    String email = faker.bothify("??????##@me.com");
+    String region = "Austin ";
+    String shortName = "SH ";
+    String name = faker.app().name();
+    String number = faker.numerify("##");
+    String domain = "@austinshoehospital.com";
 
     @Test
     @Severity(SeverityLevel.NORMAL)
@@ -37,7 +38,7 @@ public class NewShopTests {
                 .clickAddStore();
         page(AddStorePage.class)
                 .chooseRegion()
-                .fillForm(name, shortName, storeNumber, email)
+                .fillForm(region + name + number, shortName + number, number, name + domain)
                 .clickSave();
         page(MainPage.class)
                 .getHeader()

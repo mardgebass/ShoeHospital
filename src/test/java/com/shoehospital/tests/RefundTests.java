@@ -13,7 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import static com.codeborne.selenide.Selenide.page;
 
-@DisplayName("Make a refund")
+@DisplayName("Refund")
 @ExtendWith({SelenideExtension.class})
 public class RefundTests extends PaymentsPage {
 

@@ -3,7 +3,7 @@ package com.shoehospital.tests;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.WebDriverRunner;
-import com.shoehospital.DataBaseRepository;
+import com.github.javafaker.Faker;
 import com.shoehospital.config.TestConfig;
 import com.shoehospital.pages.LoginPage;
 import com.shoehospital.pages.MainPage;
@@ -18,6 +18,9 @@ import static com.codeborne.selenide.Selenide.page;
 
 @DisplayName("Login")
 public class LoginTests {
+    Faker faker = new Faker();
+    String username = faker.name().lastName();
+    String password = faker.bothify("?##???##");
 
     @AfterEach
     public void afterEach() {
@@ -61,7 +64,7 @@ public class LoginTests {
     @DisplayName("Login with invalid username")
     void invalidUsernameTest() {
         page(LoginPage.class)
-                .login("firstName", TestConfig.testConfig.password())
+                .login(username, TestConfig.testConfig.password())
                 .checkError("Invalid credentials");
     }
 
@@ -70,7 +73,7 @@ public class LoginTests {
     @DisplayName("Login with invalid password")
     void invalidPasswordTest() {
         page(LoginPage.class)
-                .login(TestConfig.testConfig.username(), "75e56d")
+                .login(TestConfig.testConfig.username(), password)
                 .checkError("Invalid credentials");
     }
 
