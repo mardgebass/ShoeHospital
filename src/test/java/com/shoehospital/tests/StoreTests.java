@@ -2,9 +2,9 @@ package com.shoehospital.tests;
 
 import com.github.javafaker.Faker;
 import com.shoehospital.extensions.SelenideExtension;
-import com.shoehospital.pages.AddStorePage;
-import com.shoehospital.pages.MainPage;
-import com.shoehospital.pages.StoreManagementPage;
+import com.shoehospital.pages.stores.AddStorePage;
+import com.shoehospital.pages.main.DashboardPage;
+import com.shoehospital.pages.stores.StoreManagementPage;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
 import org.junit.jupiter.api.DisplayName;
@@ -15,37 +15,31 @@ import static com.codeborne.selenide.Selenide.page;
 
 @DisplayName("New Shop")
 @ExtendWith({SelenideExtension.class})
-public class NewShopTests {
+public class StoreTests extends BaseTest{
 
     Faker faker = new Faker();
-
-    String region = "Austin ";
-    String shortName = "SH ";
     String name = faker.app().name();
     String number = faker.numerify("##");
-    String domain = "@austinshoehospital.com";
 
     @Test
     @Severity(SeverityLevel.NORMAL)
     @DisplayName("Shop creation")
 //    @RepeatedTest(6)
     public void createShopTest() {
-
-        page(MainPage.class)
+        page(DashboardPage.class)
                 .getHeader()
                 .clickStoreManagement();
         page(StoreManagementPage.class)
                 .clickAddStore();
         page(AddStorePage.class)
                 .chooseRegion()
-                .fillForm(region + name + number, shortName + number, number, name + domain)
-                .clickSave();
-        page(MainPage.class)
+                .fillForm("Austin " + name + " " + number, "SH" + number, number, name + "@austinshoehospital.com")
+                .clickSave()
                 .getHeader()
                 .clickStoreManagement();
         page(StoreManagementPage.class)
                 .clickPagination()
-                .checkNewStore(shortName);
+                .checkNewStore("SH" + number);
     }
 
 }

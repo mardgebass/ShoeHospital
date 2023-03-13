@@ -1,4 +1,4 @@
-package com.shoehospital.pages;
+package com.shoehospital.pages.main;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
@@ -15,77 +15,77 @@ public class Header {
     }
 
     @Step("Check Login")
-    public MainPage checkLogin() {
+    public void checkLogin() {
         navigateTo().shouldBe(Condition.visible);
-        return new MainPage();
-    }
-
-    @Step("Click search")
-    public MainPage clickSearch() {
-        $("#kt_header_search_toggle").click();
-        return new MainPage();
     }
 
     @Step("Navigate to New Order")
-    public MainPage clickNewOrder() {
+    public void clickNewOrder() {
         navigateTo().click();
         $(byText("New Order")).click();
-        return new MainPage();
     }
 
     @Step("Navigate to Store Management")
-    public MainPage clickStoreManagement() {
+    public void clickStoreManagement() {
         navigateTo().click();
         $(byText("Store Management")).click();
-        return new MainPage();
     }
 
     @Step("Navigate to Store Management")
-    public MainPage clickInventoryManagement() {
+    public void clickInventoryManagement() {
         navigateTo().click();
         $(byText("Inventory Management")).click();
-        return new MainPage();
     }
 
     @Step("Navigate to Store Management")
-    public MainPage clickInventoryStore() {
+    public void clickInventoryStore() {
         navigateTo().click();
         $(byText("Inventory Store")).click();
-        return new MainPage();
     }
 
     @Step("Navigate to QuickSale")
-    public MainPage clickQuickSale() {
+    public void clickQuickSale() {
         navigateTo().click();
         $(byText("Quick Sale")).click();
-        return new MainPage();
     }
 
     @Step("Navigate to Payments")
-    public MainPage clickPayments() {
+    public void clickPayments() {
         navigateTo().click();
         $(byText("Payments")).click();
-        return new MainPage();
     }
 
     @Step("Navigate to DCR")
-    public MainPage clickDCR() {
+    public void clickDCR() {
         navigateTo().click();
         $(byText("DCR")).click();
-        return new MainPage();
     }
 
     @Step("Navigate to LogOut")
-    public MainPage clickLogOut() {
+    public void clickLogOut() {
         $("#kt_header_user_menu_toggle").click();
         $(byText("Sign Out")).click();
-        return new MainPage();
     }
 
     @Step("Navigate to Logo")
-    public MainPage clickLogo() {
+    public Header clickLogo() {
         $x(".//div[@class='d-flex align-items-center me-5']").click();
-        return new MainPage();
+        return this;
+    }
+
+    @Step("Enter search request")
+    public Header enterSearchRequest(String id) {
+        $x(".//div[@class='btn btn-icon btn-icon-muted btn-active-light btn-active-color-primary w-30px h-30px w-md-40px h-md-40px']").click();
+        $(byName("search")).sendKeys(id);
+        $x(".//div[@class='d-flex flex-column']").$(byText("#" + id)).click();
+        return this;
+    }
+
+    @Step("Check search results")
+    public void checkSearchResults(String id) {
+        $x(".//div[@class='btn btn-icon btn-icon-muted btn-active-light btn-active-color-primary w-30px h-30px w-md-40px h-md-40px']").click();
+        $(byName("search")).sendKeys(id);
+        $x(".//div[@class='menu menu-sub menu-sub-dropdown p-7 w-325px w-md-375px show']").shouldHave(Condition.text("No result found"));
     }
 
 }

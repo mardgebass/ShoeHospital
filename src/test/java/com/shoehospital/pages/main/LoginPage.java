@@ -1,6 +1,7 @@
-package com.shoehospital.pages;
+package com.shoehospital.pages.main;
 
 import com.codeborne.selenide.Condition;
+import com.shoehospital.pages.base.BasePage;
 import io.qameta.allure.Step;
 
 import static com.codeborne.selenide.Selenide.$;
@@ -17,16 +18,14 @@ public class LoginPage extends BasePage {
     }
 
     @Step("Check error message {error} ")
-    public LoginPage checkError(String error) {
+    public void checkError(String error) {
         $x(".//div[@class='alert alert-danger']").shouldHave(Condition.text(error));
-        return this;
     }
 
     @Step("Check Logout")
-    public LoginPage checkLogout() {
+    public void checkLogout() {
         $("#username").shouldBe(Condition.visible);
         $("#password").shouldBe(Condition.visible);
         $x(".//button[@class='btn btn-lg btn-primary w-100 btn']").shouldBe(Condition.visible);
-        return this;
     }
 }

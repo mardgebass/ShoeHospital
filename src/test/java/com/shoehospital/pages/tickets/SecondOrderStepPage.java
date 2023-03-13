@@ -1,16 +1,18 @@
-package com.shoehospital.pages;
+package com.shoehospital.pages.tickets;
 
+import com.shoehospital.pages.base.BasePage;
 import io.qameta.allure.Step;
 
 import static com.codeborne.selenide.Selectors.byAttribute;
 import static com.codeborne.selenide.Selenide.*;
 import static org.openqa.selenium.Keys.ARROW_RIGHT;
 
-public class SecondOrderStepPage extends BasePage{
+public class SecondOrderStepPage extends BasePage {
 
     @Step("Add ticket {ticket}")
     public SecondOrderStepPage addTicketId(String ticket){
         $("#ticket_collection_form_tickets_2_ticketBarcode").setValue(ticket).pressEnter();
+        sleep(1000);
         return this;
     }
 
@@ -22,7 +24,6 @@ public class SecondOrderStepPage extends BasePage{
 
     @Step("Click CWR")
     public SecondOrderStepPage clickCWR(){
-        sleep(1000);
         $(byAttribute("data-attr","cwr")).$x(".//input[@class='form-check-input h-25px w-25px']").click();
         return this;
     }

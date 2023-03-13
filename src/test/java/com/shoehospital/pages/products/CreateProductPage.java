@@ -1,14 +1,16 @@
-package com.shoehospital.pages;
+package com.shoehospital.pages.products;
 
+import com.shoehospital.pages.base.BasePage;
 import io.qameta.allure.Step;
 
 import java.security.SecureRandom;
 
+import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
 import static org.openqa.selenium.Keys.ARROW_RIGHT;
 
-public class CreateProductPage {
+public class CreateProductPage extends BasePage {
 
     SecureRandom random = new SecureRandom();
 
@@ -64,9 +66,11 @@ public class CreateProductPage {
     }
 
     @Step("Click Save")
-    public CreateProductPage clickSave() {
+    public void clickSave() {
         $("#edit_product_form_save").click();
-        return this;
     }
 
+    public void checkAlertBarcodeExists() {
+        $("#toast-container").shouldHave(text("This barcode already exists"));
+    }
 }

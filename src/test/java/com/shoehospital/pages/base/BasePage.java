@@ -1,5 +1,6 @@
-package com.shoehospital.pages;
+package com.shoehospital.pages.base;
 
+import com.shoehospital.pages.main.Header;
 import lombok.Getter;
 
 public class BasePage {

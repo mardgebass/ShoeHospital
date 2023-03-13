@@ -1,18 +1,18 @@
-package com.shoehospital.pages;
+package com.shoehospital.pages.stores;
 
 import com.codeborne.selenide.Condition;
+import com.shoehospital.pages.base.BasePage;
 import io.qameta.allure.Step;
 
 import static com.codeborne.selenide.Selectors.byValue;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$x;
 
-public class StoreManagementPage extends BasePage{
+public class StoreManagementPage extends BasePage {
 
     @Step("Click Add Store")
-    public StoreManagementPage clickAddStore (){
+    public void clickAddStore (){
         $x(".//a[@class='btn btn-primary']").click();
-        return this;
     }
 
     @Step("Click Pagination")
@@ -22,8 +22,7 @@ public class StoreManagementPage extends BasePage{
         return this;
     }
 
-    public StoreManagementPage checkNewStore(String shortName) {
+    public void checkNewStore(String shortName) {
         $("#store_list").shouldHave(Condition.text(shortName));
-        return this;
     }
 }

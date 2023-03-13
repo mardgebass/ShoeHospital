@@ -1,12 +1,13 @@
-package com.shoehospital.pages;
+package com.shoehospital.pages.stores;
 
+import com.shoehospital.pages.base.BasePage;
 import io.qameta.allure.Step;
 
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$x;
 
-public class AddStorePage extends BasePage{
+public class AddStorePage extends BasePage {
 
     @Step("Choose region")
     public AddStorePage chooseRegion() {

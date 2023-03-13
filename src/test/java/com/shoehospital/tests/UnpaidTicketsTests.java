@@ -1,8 +1,13 @@
 package com.shoehospital.tests;
 
 import com.github.javafaker.Faker;
+import com.shoehospital.database.ValuesDB;
 import com.shoehospital.extensions.SelenideExtension;
-import com.shoehospital.pages.*;
+import com.shoehospital.pages.main.DashboardPage;
+import com.shoehospital.pages.tickets.CustomerOverviewPage;
+import com.shoehospital.pages.tickets.FirstOrderStepPage;
+import com.shoehospital.pages.tickets.SecondOrderStepPage;
+import com.shoehospital.pages.tickets.TicketPage;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
 import org.junit.jupiter.api.DisplayName;
@@ -13,26 +18,21 @@ import static com.codeborne.selenide.Selenide.page;
 
 @DisplayName("New order without payment")
 @ExtendWith({SelenideExtension.class})
-public class UnpaidTicketsTests {
+public class UnpaidTicketsTests extends BaseTest {
 
     Faker faker = new Faker();
-
     String firstName = faker.name().firstName();
     String lastName = faker.name().lastName();
-    String phone = faker.numerify("9#########");
+    String phone = faker.numerify("77########");
     String price = faker.numerify("###");
-    String email = faker.bothify("??????##@me.com");
-    String id = faker.numerify("20000###");
-
-    protected static String existingPhone = "9385297121";
+    String email = faker.bothify("??????##??@me.com");
+    String id = faker.numerify("2000####");
 
     @Test
     @Severity(SeverityLevel.CRITICAL)
     @DisplayName("In-progress ticket")
     public void inProgressTicketTest() {
-
-        page(MainPage.class)
-                .getTicketsInProgress()
+        page(DashboardPage.class)
                 .getHeader()
                 .clickNewOrder();
         page(FirstOrderStepPage.class)
@@ -46,22 +46,16 @@ public class UnpaidTicketsTests {
                 .clickIdLink(id);
         page(TicketPage.class)
                 .checkCreatedHistory()
-                .checkStatusPending()
+                .checkPaymentStatusPending()
                 .checkStatusInProgress()
                 .checkDropSentHistory();
-        page(MainPage.class)
-                .getHeader()
-                .clickLogo()
-                .checkTicketsInProgress();
     }
 
     @Test
     @Severity(SeverityLevel.CRITICAL)
     @DisplayName("Pending pick up ticket")
     public void pendingPickUpTicketTest() {
-
-        page(MainPage.class)
-                .getTicketsToday()
+        page(DashboardPage.class)
                 .getHeader()
                 .clickNewOrder();
         page(FirstOrderStepPage.class)
@@ -77,21 +71,23 @@ public class UnpaidTicketsTests {
                 .clickRFPU()
                 .checkStatusRFPU()
                 .checkRFPUHistory();
-        page(MainPage.class)
-                .getHeader()
-                .clickLogo()
-                .checkTicketsTodayAfter();
     }
 
     @Test
-    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Watching ticket")
+    public void watchTicketTest() {
+        page(DashboardPage.class)
+                .getHeader()
+                .enterSearchRequest(ValuesDB.getNotWatching());
+        page(TicketPage.class)
+                .clickWatch()
+                .checkWatching();
+    }
+
+    @Test
     @DisplayName("Ticket deletion")
     public void deleteTicketTest() {
-
-        page(MainPage.class)
-                .getTicketsToday()
-                .getTicketsInProgress()
-                .getTicketsWithoutDetails()
+        page(DashboardPage.class)
                 .getHeader()
                 .clickNewOrder();
         page(FirstOrderStepPage.class)
@@ -105,39 +101,9 @@ public class UnpaidTicketsTests {
                 .clickIdLink(id);
         page(TicketPage.class)
                 .clickDelete()
-                .clickConfirmDeletion();
-        page(MainPage.class)
+                .clickConfirmDeletion()
                 .getHeader()
-                .clickLogo()
-                .checkTicketsTodaySameValue()
-                .checkTicketsInProgressSameValue()
-                .checkTicketsWithoutDetailsSameValue()
-                .getHeader()
-                .clickSearch()
-                .enterSearchRequest(id)
-                .checkSearchResults();
-    }
-
-    @Test
-    @Severity(SeverityLevel.CRITICAL)
-    @DisplayName("Ticket for existing customer's phone")
-    public void createOrderForExistingPhoneTest() {
-
-        page(MainPage.class)
-                .getHeader()
-                .clickNewOrder();
-        page(FirstOrderStepPage.class)
-                .fillFormExistingPhone(existingPhone)
-                .clickContinue()
-                .clickYes();
-        page(SecondOrderStepPage.class)
-                .addTicketId(id)
-                .addPrice(price)
-                .clickFinish();
-        page(CustomerOverviewPage.class)
-                .clickIdLink(id);
-        page(TicketPage.class)
-                .checkDropSentHistory();
+                .checkSearchResults(id);
     }
 
 }

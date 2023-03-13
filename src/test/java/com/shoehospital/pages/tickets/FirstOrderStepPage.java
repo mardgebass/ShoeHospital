@@ -1,5 +1,6 @@
-package com.shoehospital.pages;
+package com.shoehospital.pages.tickets;
 
+import com.shoehospital.pages.base.BasePage;
 import io.qameta.allure.Step;
 
 import static com.codeborne.selenide.Selenide.*;
@@ -28,11 +29,10 @@ public class FirstOrderStepPage extends BasePage {
     }
 
     @Step("Confirm using the user")
-    public FirstOrderStepPage clickYes() {
+    public void clickYes() {
         sleep(1000);
         $("#customer-agreement-button").click();
         $("#fake-continue").click();
-        return this;
     }
 
 }

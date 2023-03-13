@@ -1,137 +1,161 @@
 package com.shoehospital.tests;
 
+import com.shoehospital.database.ValuesDB;
 import com.shoehospital.extensions.SelenideExtension;
-import com.shoehospital.pages.DCRPage;
-import com.shoehospital.pages.MainPage;
-import com.shoehospital.pages.PaymentsPage;
-import com.shoehospital.pages.RefundsPage;
+import com.shoehospital.pages.main.DCRPage;
+import com.shoehospital.pages.main.DashboardPage;
+import com.shoehospital.pages.payments.PaymentsPage;
+import com.shoehospital.pages.payments.RefundsPage;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import java.security.SecureRandom;
+
 import static com.codeborne.selenide.Selenide.page;
+import static com.shoehospital.database.ValuesDB.amountById;
+import static com.shoehospital.database.ValuesDB.amountByIdRefund;
 
 @DisplayName("Refund")
 @ExtendWith({SelenideExtension.class})
-public class RefundTests extends PaymentsPage {
+public class RefundTests extends BaseTest {
+
+    SecureRandom random = new SecureRandom();
+    float number = random.nextInt(5) + 1;
 
     @Test
     @Severity(SeverityLevel.NORMAL)
     @DisplayName("Make a refund in cash")
     public void makeRefundByCash() {
-        page(MainPage.class)
+        page(DashboardPage.class)
                 .getHeader()
                 .clickDCR();
         page(DCRPage.class)
-                .checkRefundBefore();
-        page(MainPage.class)
+                .checkRefundBefore()
                 .getHeader()
                 .clickPayments();
         page(PaymentsPage.class)
-                .clickRefundButton()
-                .getAmountForRefund()
-                .fillAmountRefund()
-                .fillShoeRepair()
-                .fillOtherRetail()
-                .fillSundries()
-                .fillSalesTaxes()
-                .clickRefundType()
-                .clickCashRefundType()
-                .clickSaveRefund()
+                .clickRefund(ValuesDB.getPaymentId(), ValuesDB.getAmountFromPayments())
+                .fillRefundPopup(amountById, amountById, "Cash")
+                .clickSave()
+                .scrollTop()
                 .clickRefunds();
         page(RefundsPage.class)
-                .checkSumOfRefund(REFUND);
-        page(MainPage.class)
+                .checkSumOfRefund(ValuesDB.getAmountFromRefunds());
+        page(DashboardPage.class)
                 .getHeader()
                 .clickDCR();
         page(DCRPage.class)
-                .checkRefundShoeRepair(REFUND);
+                .checkRefundShoeRepair(amountByIdRefund);
     }
 
     @Test
     @Severity(SeverityLevel.NORMAL)
     @DisplayName("Make a refund by card")
     public void makeRefundByCard() {
-        page(MainPage.class)
+        page(DashboardPage.class)
                 .getHeader()
                 .clickDCR();
         page(DCRPage.class)
-                .checkRefundBefore();
-        page(MainPage.class)
+                .checkRefundBefore()
                 .getHeader()
                 .clickPayments();
         page(PaymentsPage.class)
-                .clickRefundButton()
-                .getAmountForRefund()
-                .fillAmountRefund()
-                .fillAllShoeRepair()
-                .clickRefundType()
-                .clickCardRefundType()
-                .clickSaveRefund()
+                .clickRefund(ValuesDB.getPaymentId(), ValuesDB.getAmountFromPayments())
+                .fillRefundPopup(amountById, amountById,"Card")
+                .clickSave()
+                .scrollTop()
                 .clickRefunds();
         page(RefundsPage.class)
-                .checkSumOfRefund(REFUND);
-        page(MainPage.class)
+                .checkSumOfRefund(ValuesDB.getAmountFromRefunds())
                 .getHeader()
                 .clickDCR();
         page(DCRPage.class)
-                .checkRefundShoeRepair(REFUND);
+                .checkRefundShoeRepair(amountByIdRefund);
     }
 
     @Test
     @Severity(SeverityLevel.NORMAL)
     @DisplayName("Make a refund by check")
     public void makeRefundByCheck() {
-        page(MainPage.class)
+        page(DashboardPage.class)
                 .getHeader()
                 .clickDCR();
         page(DCRPage.class)
-                .checkRefundBefore();
-        page(MainPage.class)
+                .checkRefundBefore()
                 .getHeader()
                 .clickPayments();
         page(PaymentsPage.class)
-                .clickRefundButton()
-                .getAmountForRefund()
-                .fillAmountRefund()
-                .fillShoeRepair()
-                .fillOtherRetail()
-                .fillSundries()
-                .fillSalesTaxes()
-                .clickRefundType()
-                .clickCheckRefundType()
-                .fillNote()
-                .clickSaveRefund()
+                .clickRefund(ValuesDB.getPaymentId(), ValuesDB.getAmountFromPayments())
+                .fillRefundPopup(amountById, amountById, "Check")
+                .clickSave()
+                .scrollTop()
                 .clickRefunds();
         page(RefundsPage.class)
-                .checkSumOfRefund(REFUND);
-        page(MainPage.class)
+                .checkSumOfRefund(ValuesDB.getAmountFromRefunds())
                 .getHeader()
                 .clickDCR();
         page(DCRPage.class)
-                .checkRefundShoeRepair(REFUND);
+                .checkRefundShoeRepair(amountByIdRefund);
+    }
+
+    @Test
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Make a partial refund by check")
+    public void partialRefund() {
+        page(DashboardPage.class)
+                .getHeader()
+                .clickDCR();
+        page(DCRPage.class)
+                .checkRefundBefore()
+                .getHeader()
+                .clickPayments();
+        page(PaymentsPage.class)
+                .clickRefund(ValuesDB.getPaymentId(), ValuesDB.getAmountFromPayments())
+                .fillRefundPopup((String.valueOf(Float.parseFloat(amountById) / number)), (String.valueOf(Float.parseFloat(amountById) / number)),  "Check")
+                .clickSave()
+                .scrollTop()
+                .clickRefunds();
+        page(RefundsPage.class)
+                .checkSumOfRefund(ValuesDB.getAmountFromRefunds())
+                .getHeader()
+                .clickDCR();
+        page(DCRPage.class)
+                .checkRefundShoeRepair(amountByIdRefund);
+    }
+
+    @Test
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Make a refund without Amount")
+    public void makeRefundWithoutAmount() {
+        page(DashboardPage.class)
+                .getHeader()
+                .clickDCR();
+        page(DCRPage.class)
+                .checkRefundBefore()
+                .getHeader()
+                .clickPayments();
+        page(PaymentsPage.class)
+                .scrollTop()
+                .clickRefund(ValuesDB.getPaymentId(), ValuesDB.getAmountFromPayments())
+                .fillRefundPopup("0", amountById,"Check")
+                .clickSave()
+                .checkEqualError();
     }
 
     @Test
     @Severity(SeverityLevel.NORMAL)
     @DisplayName("Make a refund with wrong amount")
     public void makeRefundWithErrorSum() {
-        page(MainPage.class)
+        page(DashboardPage.class)
                 .getHeader()
                 .clickPayments();
         page(PaymentsPage.class)
-                .clickRefundButton()
-                .getAmountForRefund()
-                .fillAmountRefund()
-                .fillShoeRepair()
-                .fillErrorOtherRetail()
-                .fillSundries()
-                .fillSalesTaxes()
-                .clickRefundType()
-                .clickCheckRefundType()
-                .clickSaveRefund()
+                .clickRefund(ValuesDB.getPaymentId(), ValuesDB.getAmountFromPayments())
+                .fillRefundPopup((String.valueOf(Float.parseFloat(amountById) + number)), amountById,"Check")
+                .clickSave()
                 .checkEqualError();
     }
 
