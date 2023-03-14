@@ -9,31 +9,33 @@ import java.util.List;
 
 public class ValuesDB {
 
+    static String storeId = "8";
+
     static String requestSku =
             "SELECT b.barcode FROM stores_products s JOIN barcodes b " +
             "ON s.product_id = b.product_id " +
-            "WHERE store_id = 4 AND hide = 0";
+            "WHERE store_id = " + storeId + " AND hide = 0";
 
     static String requestSecondSku =
             "SELECT b.barcode FROM stores_products s JOIN barcodes b " +
                     "ON s.product_id = b.product_id " +
-                    "WHERE store_id = 4 AND hide = 0 AND b.barcode <> ";
+                    "WHERE store_id = " + storeId + " AND hide = 0 AND b.barcode <> ";
 
     static String requestSum = "SELECT s.sale_price FROM stores_products s JOIN barcodes b " +
             "ON s.product_id = b.product_id " +
-            "WHERE store_id = 4 AND barcode = ";
+            "WHERE store_id = " + storeId + " AND barcode = ";
 
     static String requestNotAvailableSku = "SELECT b.barcode FROM product_region s LEFT OUTER JOIN stores_products p " +
             "ON s.product_id = p.product_id JOIN barcodes b ON s.product_id = b.product_id " +
             "WHERE region_id = 2 AND store_id is null";
 
-    static String requestPaymentIdWithoutRefunds = "SELECT id FROM app.payments WHERE refunds_amount = 0 AND store_id = 4";
+    static String requestPaymentIdWithoutRefunds = "SELECT id FROM app.payments WHERE refunds_amount = 0 AND store_id = " + storeId;
     static String requestAmountFromPayments = "SELECT total_amount FROM app.payments WHERE id = ";
     static String requestAmountFromRefunds = "SELECT total_amount FROM app.refunds WHERE payment_id = ";
     static String requestTitlePercent = "SELECT title FROM app.promocode WHERE is_active=1 AND is_service=0 AND is_percent=1";
     static String requestPromoValue = "SELECT price FROM app.promocode WHERE title = ";
     static String requestTitleDollar = "SELECT title FROM app.promocode WHERE is_active=1 AND is_service=0 AND is_percent=0";
-    static String requestNotWatching = "SELECT ticket_barcode FROM app.tickets where store_id = 4 and watching is null and status <> 'Ordering' and status <> 'Completed';";
+    static String requestNotWatching = "SELECT ticket_barcode FROM app.tickets where store_id = " + storeId + " and watching is null and status <> 'Ordering' and status <> 'Completed';";
 
     private static Connection connection;
     private static Statement statement;

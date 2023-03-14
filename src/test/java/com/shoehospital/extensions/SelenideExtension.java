@@ -12,9 +12,7 @@ public class SelenideExtension implements BeforeEachCallback, AfterAllCallback {
 
     @Override
     public void beforeEach(ExtensionContext extensionContext) {
-//        ChromeOptions ops = new ChromeOptions();
-//        ops.addArguments("--remote-allow-origins=*");
-        Configuration.browser = "Firefox";
+//        Configuration.browser = "Firefox";
         Configuration.browserSize = "1280x800";
         Selenide.open(TestConfig.testConfig.baseUrl());
         Configuration.pageLoadTimeout = 40;

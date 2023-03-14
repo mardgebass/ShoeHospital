@@ -22,15 +22,16 @@ public class SecondOrderStepPage extends BasePage {
         return this;
     }
 
-    @Step("Click CWR")
-    public SecondOrderStepPage clickCWR(){
-        $(byAttribute("data-attr","cwr")).$x(".//input[@class='form-check-input h-25px w-25px']").click();
-        return this;
-    }
+//    @Step("Click CWR")
+//    public SecondOrderStepPage clickCWR(){
+//        $(byAttribute("data-attr","cwr")).$x(".//input[@class='form-check-input h-25px w-25px']").click();
+//        return this;
+//    }
 
     @Step("Add price {price}")
     public SecondOrderStepPage addPrice(String price){
         $(byAttribute("data-attr","est_cost")).$x(".//input[@class='form-control formatCost']").sendKeys(ARROW_RIGHT, price);
+        sleep(1000);
         return this;
     }
 

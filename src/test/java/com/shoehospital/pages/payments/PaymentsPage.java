@@ -23,7 +23,7 @@ public class PaymentsPage extends BasePage {
 
     @Step("Click Refund button")
     public PaymentsPage clickRefund(String id, String amount) {
-        $("#payment_search_search").setValue(amount).pressEnter();
+//        $("#payment_search_search").setValue(amount).pressEnter();
         $(byId(id)).find(byText("Refund")).click();
         return this;
     }

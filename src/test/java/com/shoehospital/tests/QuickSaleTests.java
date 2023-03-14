@@ -38,6 +38,7 @@ public class QuickSaleTests extends BaseTest {
     public void discountDollarTest() {
         page(QuickSalePage.class)
                 .addSKU(ValuesDB.getSku())
+                .clickAddDiscount()
                 .chooseDiscountType("Custom $")
                 .clickSaveDiscount()
                 .addDiscountSum(discount)
@@ -55,6 +56,7 @@ public class QuickSaleTests extends BaseTest {
     public void discountPercentTest() {
         page(QuickSalePage.class)
                 .addSKU(ValuesDB.getSku())
+                .clickAddDiscount()
                 .chooseDiscountType("Custom %")
                 .clickSaveDiscount()
                 .addDiscountSum(discount)
@@ -72,6 +74,7 @@ public class QuickSaleTests extends BaseTest {
     public void discountPromoPercentTest() {
         page(QuickSalePage.class)
                 .addSKU(ValuesDB.getSku())
+                .clickAddDiscount()
                 .chooseDiscountType(ValuesDB.getTitlePercent())
                 .clickSaveDiscount()
                 .checkDiscountInRow(String.format(Locale.ENGLISH, "%(.2f", parseDouble(ValuesDB.getValuePercent())) + "%")
@@ -88,6 +91,7 @@ public class QuickSaleTests extends BaseTest {
     public void discountPromoDollarTest() {
         page(QuickSalePage.class)
                 .addSKU(ValuesDB.getSku())
+                .clickAddDiscount()
                 .chooseDiscountType(ValuesDB.getTitleDollar())
                 .clickSaveDiscount()
                 .checkDiscountInRow("$" + String.format(Locale.ENGLISH, "%(.2f", parseDouble(ValuesDB.getValueDollar())))

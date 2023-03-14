@@ -66,7 +66,7 @@ public class QuickSalePage extends BasePage {
     }
 
     @Step("Click plus icon")
-    public QuickSalePage clickPlus() {
+    public QuickSalePage clickAddDiscount() {
         $x(".//button[@class='cart-apply-discount-btn btn btn-icon btn-sm btn-bg-light text-hover-primary me-3']").click();
         return this;
     }
