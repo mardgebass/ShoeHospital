@@ -4,11 +4,16 @@ import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.WebDriverRunner;
 import com.shoehospital.config.TestConfig;
+import org.apache.commons.io.FileUtils;
+import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.AfterAllCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
-public class SelenideExtension implements BeforeEachCallback, AfterAllCallback {
+import java.io.File;
+import java.io.IOException;
+
+public class SelenideExtension implements BeforeAllCallback, BeforeEachCallback, AfterAllCallback {
 
     @Override
     public void beforeEach(ExtensionContext extensionContext) {
@@ -26,4 +31,8 @@ public class SelenideExtension implements BeforeEachCallback, AfterAllCallback {
         WebDriverRunner.clearBrowserCache();
     }
 
+    @Override
+    public void beforeAll(ExtensionContext extensionContext) throws IOException {
+        FileUtils.cleanDirectory(new File("D:/git/repos/ShoeHospital/allure-results"));
+    }
 }

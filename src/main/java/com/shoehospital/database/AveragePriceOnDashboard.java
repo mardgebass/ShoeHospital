@@ -7,11 +7,10 @@ import java.util.ArrayList;
 import java.util.DoubleSummaryStatistics;
 import java.util.List;
 
-public class AveragesDB {
+public class AveragePriceOnDashboard {
 
     private static Connection connection;
     private static Statement statement;
-    private static ResultSet resultSet;
 
     static String resultValue;
 
@@ -21,7 +20,7 @@ public class AveragesDB {
             Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection(TestConfigDB.testConfig.url(), TestConfigDB.testConfig.user(), TestConfigDB.testConfig.password());
             statement = connection.createStatement();
-            resultSet = statement.executeQuery("SELECT estimation_cost FROM app.tickets WHERE store_id = 4 AND (drop_off_date between adddate(now(),-8) and now()) and estimation_cost <> 0");
+            ResultSet resultSet = statement.executeQuery("SELECT estimation_cost FROM app.tickets WHERE store_id = " + TestConfigDB.testConfig.storeId() + " AND (drop_off_date between adddate(now(),-8) and now()) and estimation_cost <> 0");
 
             List<Double> costs = new ArrayList<>();
             while (resultSet.next()) {

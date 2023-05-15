@@ -30,7 +30,7 @@ public class FirstOrderStepPage extends BasePage {
 
     @Step("Confirm using the user")
     public void clickYes() {
-        sleep(1000);
+        sleep(1500);
         $("#customer-agreement-button").click();
         $("#fake-continue").click();
     }

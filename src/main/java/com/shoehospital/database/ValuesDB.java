@@ -9,54 +9,40 @@ import java.util.List;
 
 public class ValuesDB {
 
-    static String storeId = "8";
+    static String requestSku = "SELECT b.barcode FROM stores_products s JOIN barcodes b ON s.product_id = b.product_id " +
+            "WHERE store_id = " + TestConfigDB.testConfig.storeId() + " AND hide = 0";
 
-    static String requestSku =
-            "SELECT b.barcode FROM stores_products s JOIN barcodes b " +
-            "ON s.product_id = b.product_id " +
-            "WHERE store_id = " + storeId + " AND hide = 0";
-
-    static String requestSecondSku =
-            "SELECT b.barcode FROM stores_products s JOIN barcodes b " +
-                    "ON s.product_id = b.product_id " +
-                    "WHERE store_id = " + storeId + " AND hide = 0 AND b.barcode <> ";
-
-    static String requestSum = "SELECT s.sale_price FROM stores_products s JOIN barcodes b " +
-            "ON s.product_id = b.product_id " +
-            "WHERE store_id = " + storeId + " AND barcode = ";
+    static String requestSum = "SELECT s.sale_price FROM stores_products s JOIN barcodes b ON s.product_id = b.product_id " +
+            "WHERE store_id = " + TestConfigDB.testConfig.storeId() + " AND barcode = ";
 
     static String requestNotAvailableSku = "SELECT b.barcode FROM product_region s LEFT OUTER JOIN stores_products p " +
             "ON s.product_id = p.product_id JOIN barcodes b ON s.product_id = b.product_id " +
             "WHERE region_id = 2 AND store_id is null";
 
-    static String requestPaymentIdWithoutRefunds = "SELECT id FROM app.payments WHERE refunds_amount = 0 AND store_id = " + storeId;
+    static String requestPaymentIdWithoutRefunds = "SELECT id FROM app.payments WHERE refunds_amount = 0 AND store_id = " + TestConfigDB.testConfig.storeId();
     static String requestAmountFromPayments = "SELECT total_amount FROM app.payments WHERE id = ";
     static String requestAmountFromRefunds = "SELECT total_amount FROM app.refunds WHERE payment_id = ";
-    static String requestTitlePercent = "SELECT title FROM app.promocode WHERE is_active=1 AND is_service=0 AND is_percent=1";
+    static String requestTitle = "SELECT title FROM app.promocode WHERE is_active=1 AND is_service=0 AND is_percent=";
+    
     static String requestPromoValue = "SELECT price FROM app.promocode WHERE title = ";
-    static String requestTitleDollar = "SELECT title FROM app.promocode WHERE is_active=1 AND is_service=0 AND is_percent=0";
-    static String requestNotWatching = "SELECT ticket_barcode FROM app.tickets where store_id = " + storeId + " and watching is null and status <> 'Ordering' and status <> 'Completed';";
+
+    static String requestNotWatching = "SELECT ticket_barcode FROM app.tickets where store_id = " + TestConfigDB.testConfig.storeId() + " and watching is null and status <> 'Ordering' and status <> 'Completed';";
+
+    public static String falseSku;
+    public static String amountById;
+    public static String amountByIdRefund;
+    public static String notWatching;
+
 
     private static Connection connection;
     private static Statement statement;
-    private static ResultSet resultSet;
+    private static String resultValue;
+    private static String sku;
+    private static String paymentId;
+    private static String secondSku;
+    private static String titlePercent;
+    private static String titleDollar;
 
-    static String sku;
-    public static String notWatching;
-    static String sum;
-    public static String falseSku;
-    static String resultValue;
-    static String paymentId;
-    public static String amountById;
-    public static String amountByIdRefund;
-    static String secondSku;
-    static String secondSum;
-    static String titlePercent;
-    public static String valuePercent;
-    public static String valueDollar;
-    static String titleDollar;
-
-    static SecureRandom random = new SecureRandom();
 
     public static String getDataBaseValue(String request, String columnLabel) {
 
@@ -64,13 +50,14 @@ public class ValuesDB {
             Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection(TestConfigDB.testConfig.url(), TestConfigDB.testConfig.user(), TestConfigDB.testConfig.password());
             statement = connection.createStatement();
-            resultSet = statement.executeQuery(request);
+            ResultSet resultSet = statement.executeQuery(request);
 
             List<String> barcodes = new ArrayList<>();
             while (resultSet.next()) {
                 barcodes.add(resultSet.getString(columnLabel));
             }
 
+            SecureRandom random = new SecureRandom();
             resultValue = barcodes.get(random.nextInt(barcodes.size()));
 
         } catch (ClassNotFoundException | SQLException classNotFoundException) {
@@ -86,13 +73,15 @@ public class ValuesDB {
         return resultValue;
     }
 
+
+//    SKU (barcode)
     public static String getSku() {
         sku = getDataBaseValue(requestSku, "barcode");
         return sku;
     }
 
     public static String getSecondSku() {
-        secondSku = getDataBaseValue(requestSecondSku + sku, "barcode");
+        secondSku = getDataBaseValue(requestSku + "AND b.barcode <> " + sku, "barcode");
         return secondSku;
     }
 
@@ -100,8 +89,17 @@ public class ValuesDB {
         falseSku = getDataBaseValue(requestNotAvailableSku, "barcode");
         return falseSku;
     }
+    
 
-    public static String getPaymentId() {
+//    sums
+    public static String getSum() {
+        return getDataBaseValue(requestSum + sku, "sale_price");
+    }
+    public static String getSumOfSecond() {
+        return getDataBaseValue(requestSum + secondSku, "sale_price");
+    }
+
+    public static String getPaymentIdWithoutRefund() {
         paymentId = getDataBaseValue(requestPaymentIdWithoutRefunds, "id");
         return paymentId;
     }
@@ -111,39 +109,28 @@ public class ValuesDB {
         return amountById;
     }
 
-    public static String getSum() {
-        sum = getDataBaseValue(requestSum + sku, "sale_price");
-        return sum;
-    }
-
-    public static String getSumOfSecond() {
-        secondSum = getDataBaseValue(requestSum + secondSku, "sale_price");
-        return secondSum;
-    }
-
     public static String getAmountFromRefunds() {
         amountByIdRefund = getDataBaseValue(requestAmountFromRefunds + paymentId, "total_amount");
         return amountByIdRefund;
     }
 
+//      discounts
     public static String getTitlePercent() {
-        titlePercent = getDataBaseValue(requestTitlePercent, "title");
+        titlePercent = getDataBaseValue(requestTitle + "1", "title");
         return titlePercent;
     }
 
     public static String getTitleDollar() {
-        titleDollar = getDataBaseValue(requestTitleDollar, "title");
+        titleDollar = getDataBaseValue(requestTitle + "0", "title");
         return titleDollar;
     }
 
     public static String getValuePercent() {
-        valuePercent = getDataBaseValue(requestPromoValue + "'" + titlePercent + "'", "price");
-        return valuePercent;
+        return getDataBaseValue(requestPromoValue + "'" + titlePercent + "'", "price");
     }
 
     public static String getValueDollar() {
-        valueDollar = getDataBaseValue(requestPromoValue + "'" + titleDollar + "'", "price");
-        return valueDollar;
+        return getDataBaseValue(requestPromoValue + "'" + titleDollar + "'", "price");
     }
 
     public static String getNotWatching() {

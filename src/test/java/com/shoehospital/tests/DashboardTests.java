@@ -1,7 +1,7 @@
 package com.shoehospital.tests;
 
-import com.shoehospital.database.AveragesDB;
-import com.shoehospital.database.CountDB;
+import com.shoehospital.database.AveragePriceOnDashboard;
+import com.shoehospital.database.TicketsAmountOnDashboard;
 import com.shoehospital.database.ValuesDB;
 import com.shoehospital.extensions.SelenideExtension;
 import com.shoehospital.pages.main.DashboardPage;
@@ -21,35 +21,35 @@ public class DashboardTests extends BaseTest {
     @DisplayName("Tablet Items on Shelf")
     public void pendingPickUpTicketTest() {
         page(DashboardPage.class)
-                .checkItemsOnShelf(CountDB.getOnShelf());
+                .checkItemsOnShelf(TicketsAmountOnDashboard.getOnShelf());
     }
 
     @Test
     @DisplayName("Tablet Repairs in progress")
     public void inProgressTabletTest() {
         page(DashboardPage.class)
-                .checkTicketsInProgress(CountDB.getInProgress());
+                .checkTicketsInProgress(TicketsAmountOnDashboard.getInProgress());
     }
 
     @Test
     @DisplayName("Tablet Tickets Submitted Today")
     public void TicketsTodayTabletTest() {
         page(DashboardPage.class)
-                .checkTicketsToday(CountDB.getToday());
+                .checkTicketsToday(TicketsAmountOnDashboard.getToday());
     }
 
     @Test
     @DisplayName("Average price per ticket")
     public void AverageTest() {
         page(DashboardPage.class)
-                .checkAveragePrice(AveragesDB.getAverageValue());
+                .checkAveragePrice(AveragePriceOnDashboard.getAverageValue());
     }
 
     @Test
     @DisplayName("Tablet Tickets Without Details")
     public void WithoutDetailsTabletTest() {
         page(DashboardPage.class)
-                .checkTicketsWithoutDetails(CountDB.getWithoutDetails());
+                .checkTicketsWithoutDetails(TicketsAmountOnDashboard.getWithoutDetails());
     }
 
     @Test

@@ -10,5 +10,6 @@ public interface TestConfigDB extends Config {
     String url();
     String user();
     String password();
+    String storeId();
 
 }

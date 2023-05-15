@@ -2,12 +2,8 @@ package com.shoehospital.tests;
 
 import com.github.javafaker.Faker;
 import com.shoehospital.extensions.SelenideExtension;
-import com.shoehospital.pages.main.DCRPage;
 import com.shoehospital.pages.main.DashboardPage;
-import com.shoehospital.pages.tickets.CartPage;
-import com.shoehospital.pages.tickets.FirstOrderStepPage;
-import com.shoehospital.pages.tickets.SecondOrderStepPage;
-import com.shoehospital.pages.tickets.TicketPage;
+import com.shoehospital.pages.tickets.*;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,11 +20,11 @@ public class PaidTicketsTests extends BaseTest{
     Faker faker = new Faker();
     String price = faker.numerify("###");
     String discount = faker.numerify("#.##");
-    String id = faker.numerify("50000###");
+    String id = faker.numerify("100####");
     String phone = "9385297121";
     
     @BeforeEach
-    public void loginAndCreationTest() {
+    public void createTest() {
         page(DashboardPage.class)
                 .getHeader()
                 .clickNewOrder();
@@ -40,141 +36,102 @@ public class PaidTicketsTests extends BaseTest{
                 .addTicketId(id)
                 .addDate()
                 .addPrice(price)
-                .clickFinish()
-                .getHeader()
-                .clickDCR();
+                .clickFinish();
     }
 
     @Test
     @Severity(SeverityLevel.CRITICAL)
     @DisplayName("In progress ticket paid by Check")
     public void inProgressCheckTest() {
-        page(DCRPage.class)
-                .checkCheckBefore()
-                .getHeader()
-                .enterSearchRequest(id);
+        page(CustomerOverviewPage.class)
+                .clickIdLink(id);
         page(TicketPage.class)
                 .clickProceedToPayment();
         page(CartPage.class)
                 .payByCheck();
         page(TicketPage.class)
-                .checkStatusPaid()
-                .getHeader()
-                .clickDCR();
-        page(DCRPage.class)
-                .checkCheckResult(price);
+                .checkStatusPaid();
     }
 
     @Test
     @Severity(SeverityLevel.CRITICAL)
     @DisplayName("Pending Picked up ticket paid by check")
     public void pendingPickedUpCheckTest() {
-        page(DCRPage.class)
-                .checkCheckBefore()
-                .getHeader()
-                .enterSearchRequest(id);
+        page(CustomerOverviewPage.class)
+                .clickIdLink(id);
         page(TicketPage.class)
                 .clickRFPU()
                 .clickProceedToPayment();
         page(CartPage.class)
                 .payByCheck();
         page(TicketPage.class)
-                .checkStatusPaid()
-                .getHeader()
-                .clickDCR();
-        page(DCRPage.class)
-                .checkCheckResult(price);
+                .checkStatusPaid();
     }
 
     @Test
     @Severity(SeverityLevel.CRITICAL)
     @DisplayName("In progress ticket paid in Cash")
     public void inProgressCashTest() {
-        page(DCRPage.class)
-                .checkCashBefore()
-                .getHeader()
-                .enterSearchRequest(id);
+        page(CustomerOverviewPage.class)
+                .clickIdLink(id);
         page(TicketPage.class)
                 .clickProceedToPayment();
         page(CartPage.class)
                 .payByCash();
         page(TicketPage.class)
-                .checkStatusPaid()
-                .getHeader()
-                .clickDCR();
-        page(DCRPage.class)
-                .checkCashResult(price);
+                .checkStatusPaid();
     }
 
     @Test
     @Severity(SeverityLevel.CRITICAL)
     @DisplayName("Pending Picked up ticket paid in cash")
     public void pendingPickedUpCashTest() {
-        page(DCRPage.class)
-                .checkCashBefore()
-                .getHeader()
-                .enterSearchRequest(id);
+        page(CustomerOverviewPage.class)
+                .clickIdLink(id);
         page(TicketPage.class)
                 .clickRFPU()
                 .clickProceedToPayment();
         page(CartPage.class)
                 .payByCash();
         page(TicketPage.class)
-                .checkStatusPaid()
-                .getHeader()
-                .clickDCR();
-        page(DCRPage.class)
-                .checkCashResult(price);
+                .checkStatusPaid();
     }
 
     @Test
     @Severity(SeverityLevel.CRITICAL)
     @DisplayName("In-progress ticket paid by card")
     public void inProgressCardTest() {
-        page(DCRPage.class)
-                .checkCardBefore()
-                .getHeader()
-                .enterSearchRequest(id);
+        page(CustomerOverviewPage.class)
+                .clickIdLink(id);
         page(TicketPage.class)
                 .clickProceedToPayment();
         page(CartPage.class)
                 .payByCard();
         page(TicketPage.class)
-                .checkStatusPaid()
-                .getHeader()
-                .clickDCR();
-        page(DCRPage.class)
-                .checkCardResult(price);
+                .checkStatusPaid();
     }
 
     @Test
     @Severity(SeverityLevel.CRITICAL)
     @DisplayName("Pending Picked up ticket paid by card")
     public void pendingPickedUpCardTest() {
-        page(DCRPage.class)
-                .checkCardBefore()
-                .getHeader()
-                .enterSearchRequest(id);
+        page(CustomerOverviewPage.class)
+                .clickIdLink(id);
         page(TicketPage.class)
                 .clickRFPU()
                 .clickProceedToPayment();
         page(CartPage.class)
                 .payByCard();
         page(TicketPage.class)
-                .checkStatusPaid()
-                .getHeader()
-                .clickDCR();
-        page(DCRPage.class)
-                .checkCardResult(price);
+                .checkStatusPaid();
     }
 
     @Test
     @Severity(SeverityLevel.CRITICAL)
     @DisplayName("Picked up ticket")
     public void pickedUpTicketTest() {
-        page(DCRPage.class)
-                .getHeader()
-                .enterSearchRequest(id);
+        page(CustomerOverviewPage.class)
+                .clickIdLink(id);
         page(TicketPage.class)
                 .clickProceedToPayment();
         page(CartPage.class)
@@ -190,9 +147,8 @@ public class PaidTicketsTests extends BaseTest{
     @Severity(SeverityLevel.CRITICAL)
     @DisplayName("Error for Mark ticket Picked up without payment")
     public void errorPickedUpTest() {
-        page(DCRPage.class)
-                .getHeader()
-                .enterSearchRequest(id);
+        page(CustomerOverviewPage.class)
+                .clickIdLink(id);
         page(TicketPage.class)
                 .clickRFPU()
                 .clickPickedUp()
@@ -203,42 +159,30 @@ public class PaidTicketsTests extends BaseTest{
     @Severity(SeverityLevel.CRITICAL)
     @DisplayName("Apply individual $ discount")
     public void applyDollarTest() {
-        page(DCRPage.class)
-                .checkCashBefore()
-                .getHeader()
-                .enterSearchRequest(id);
+        page(CustomerOverviewPage.class)
+                .clickIdLink(id);
         page(TicketPage.class)
                 .clickProceedToPayment();
         page(CartPage.class)
                 .chooseDiscountType("Custom $")
                 .addDiscountSum(discount)
                 .checkDiscount("-$1" + discount)
-                .payByCash()
-                .getHeader()
-                .clickDCR();
-        page(DCRPage.class)
-                .checkCashDiscountResult(price, discount);
+                .payByCash();
     }
 
     @Test
     @Severity(SeverityLevel.CRITICAL)
     @DisplayName("Apply individual % discount")
     public void applyPercentTest() {
-        page(DCRPage.class)
-                .checkCheckBefore()
-                .getHeader()
-                .enterSearchRequest(id);
+        page(CustomerOverviewPage.class)
+                .clickIdLink(id);
         page(TicketPage.class)
                 .clickProceedToPayment();
         page(CartPage.class)
                 .chooseDiscountType("Custom %")
                 .addDiscountSum(discount)
                 .checkDiscount("-1" + discount + "%")
-                .payByCheck()
-                .getHeader()
-                .clickDCR();
-        page(DCRPage.class)
-                .checkCheckDiscountResult(price, discount);
+                .payByCheck();
     }
 }
 

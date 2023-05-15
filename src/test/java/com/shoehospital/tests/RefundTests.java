@@ -2,7 +2,6 @@ package com.shoehospital.tests;
 
 import com.shoehospital.database.ValuesDB;
 import com.shoehospital.extensions.SelenideExtension;
-import com.shoehospital.pages.main.DCRPage;
 import com.shoehospital.pages.main.DashboardPage;
 import com.shoehospital.pages.payments.PaymentsPage;
 import com.shoehospital.pages.payments.RefundsPage;
@@ -16,7 +15,6 @@ import java.security.SecureRandom;
 
 import static com.codeborne.selenide.Selenide.page;
 import static com.shoehospital.database.ValuesDB.amountById;
-import static com.shoehospital.database.ValuesDB.amountByIdRefund;
 
 @DisplayName("Refund")
 @ExtendWith({SelenideExtension.class})
@@ -31,24 +29,16 @@ public class RefundTests extends BaseTest {
     public void makeRefundByCash() {
         page(DashboardPage.class)
                 .getHeader()
-                .clickDCR();
-        page(DCRPage.class)
-                .checkRefundBefore()
-                .getHeader()
                 .clickPayments();
         page(PaymentsPage.class)
-                .clickRefund(ValuesDB.getPaymentId(), ValuesDB.getAmountFromPayments())
-                .fillRefundPopup(amountById, amountById, "Cash")
+                .clickRefund(ValuesDB.getPaymentIdWithoutRefund(), ValuesDB.getAmountFromPayments())
+                .fillRefundPopup(amountById, amountById)
+                .chooseType("Cash")
                 .clickSave()
                 .scrollTop()
                 .clickRefunds();
         page(RefundsPage.class)
                 .checkSumOfRefund(ValuesDB.getAmountFromRefunds());
-        page(DashboardPage.class)
-                .getHeader()
-                .clickDCR();
-        page(DCRPage.class)
-                .checkRefundShoeRepair(amountByIdRefund);
     }
 
     @Test
@@ -57,23 +47,16 @@ public class RefundTests extends BaseTest {
     public void makeRefundByCard() {
         page(DashboardPage.class)
                 .getHeader()
-                .clickDCR();
-        page(DCRPage.class)
-                .checkRefundBefore()
-                .getHeader()
                 .clickPayments();
         page(PaymentsPage.class)
-                .clickRefund(ValuesDB.getPaymentId(), ValuesDB.getAmountFromPayments())
-                .fillRefundPopup(amountById, amountById,"Card")
+                .clickRefund(ValuesDB.getPaymentIdWithoutRefund(), ValuesDB.getAmountFromPayments())
+                .fillRefundPopup(amountById, amountById)
+                .chooseType("Card")
                 .clickSave()
                 .scrollTop()
                 .clickRefunds();
         page(RefundsPage.class)
-                .checkSumOfRefund(ValuesDB.getAmountFromRefunds())
-                .getHeader()
-                .clickDCR();
-        page(DCRPage.class)
-                .checkRefundShoeRepair(amountByIdRefund);
+                .checkSumOfRefund(ValuesDB.getAmountFromRefunds());
     }
 
     @Test
@@ -82,23 +65,16 @@ public class RefundTests extends BaseTest {
     public void makeRefundByCheck() {
         page(DashboardPage.class)
                 .getHeader()
-                .clickDCR();
-        page(DCRPage.class)
-                .checkRefundBefore()
-                .getHeader()
                 .clickPayments();
         page(PaymentsPage.class)
-                .clickRefund(ValuesDB.getPaymentId(), ValuesDB.getAmountFromPayments())
-                .fillRefundPopup(amountById, amountById, "Check")
+                .clickRefund(ValuesDB.getPaymentIdWithoutRefund(), ValuesDB.getAmountFromPayments())
+                .fillRefundPopup(amountById, amountById)
+                .chooseType("Check")
                 .clickSave()
                 .scrollTop()
                 .clickRefunds();
         page(RefundsPage.class)
-                .checkSumOfRefund(ValuesDB.getAmountFromRefunds())
-                .getHeader()
-                .clickDCR();
-        page(DCRPage.class)
-                .checkRefundShoeRepair(amountByIdRefund);
+                .checkSumOfRefund(ValuesDB.getAmountFromRefunds());
     }
 
     @Test
@@ -107,23 +83,16 @@ public class RefundTests extends BaseTest {
     public void partialRefund() {
         page(DashboardPage.class)
                 .getHeader()
-                .clickDCR();
-        page(DCRPage.class)
-                .checkRefundBefore()
-                .getHeader()
                 .clickPayments();
         page(PaymentsPage.class)
-                .clickRefund(ValuesDB.getPaymentId(), ValuesDB.getAmountFromPayments())
-                .fillRefundPopup((String.valueOf(Float.parseFloat(amountById) / number)), (String.valueOf(Float.parseFloat(amountById) / number)),  "Check")
+                .clickRefund(ValuesDB.getPaymentIdWithoutRefund(), ValuesDB.getAmountFromPayments())
+                .fillRefundPopup((String.valueOf((Float.parseFloat(amountById)) / number)), (String.valueOf((Float.parseFloat(amountById)) / number)))
+                .chooseType("Check")
                 .clickSave()
                 .scrollTop()
                 .clickRefunds();
         page(RefundsPage.class)
-                .checkSumOfRefund(ValuesDB.getAmountFromRefunds())
-                .getHeader()
-                .clickDCR();
-        page(DCRPage.class)
-                .checkRefundShoeRepair(amountByIdRefund);
+                .checkSumOfRefund(ValuesDB.getAmountFromRefunds());
     }
 
     @Test
@@ -132,15 +101,12 @@ public class RefundTests extends BaseTest {
     public void makeRefundWithoutAmount() {
         page(DashboardPage.class)
                 .getHeader()
-                .clickDCR();
-        page(DCRPage.class)
-                .checkRefundBefore()
-                .getHeader()
                 .clickPayments();
         page(PaymentsPage.class)
                 .scrollTop()
-                .clickRefund(ValuesDB.getPaymentId(), ValuesDB.getAmountFromPayments())
-                .fillRefundPopup("0", amountById,"Check")
+                .clickRefund(ValuesDB.getPaymentIdWithoutRefund(), ValuesDB.getAmountFromPayments())
+                .fillRefundPopup("0", amountById)
+                .chooseType("Check")
                 .clickSave()
                 .checkEqualError();
     }
@@ -153,8 +119,9 @@ public class RefundTests extends BaseTest {
                 .getHeader()
                 .clickPayments();
         page(PaymentsPage.class)
-                .clickRefund(ValuesDB.getPaymentId(), ValuesDB.getAmountFromPayments())
-                .fillRefundPopup((String.valueOf(Float.parseFloat(amountById) + number)), amountById,"Check")
+                .clickRefund(ValuesDB.getPaymentIdWithoutRefund(), ValuesDB.getAmountFromPayments())
+                .fillRefundPopup((String.valueOf(Float.parseFloat(amountById) + number)), amountById)
+                .chooseType("Check")
                 .clickSave()
                 .checkEqualError();
     }

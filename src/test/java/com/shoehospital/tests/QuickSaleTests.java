@@ -3,8 +3,8 @@ package com.shoehospital.tests;
 import com.github.javafaker.Faker;
 import com.shoehospital.database.ValuesDB;
 import com.shoehospital.extensions.SelenideExtension;
-import com.shoehospital.pages.payments.PaymentsPage;
 import com.shoehospital.pages.main.DashboardPage;
+import com.shoehospital.pages.payments.PaymentsPage;
 import com.shoehospital.pages.products.QuickSalePage;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
@@ -16,8 +16,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import java.util.Locale;
 
 import static com.codeborne.selenide.Selenide.page;
-import static com.shoehospital.database.ValuesDB.valueDollar;
-import static com.shoehospital.database.ValuesDB.valuePercent;
 import static java.lang.Double.parseDouble;
 
 @DisplayName("Quick Sale")
@@ -70,6 +68,17 @@ public class QuickSaleTests extends BaseTest {
     }
 
     @Test
+    @DisplayName("Sale products with promocode in %")
+    public void discountInRowPromoPercentTest() {
+        page(QuickSalePage.class)
+                .addSKU(ValuesDB.getSku())
+                .clickAddDiscount()
+                .chooseDiscountType(ValuesDB.getTitlePercent())
+                .clickSaveDiscount()
+                .checkDiscountInRow(String.format(Locale.ENGLISH, "%(.2f", parseDouble(ValuesDB.getValuePercent())) + "%");
+    }
+
+    @Test
     @DisplayName("Sale products with promocode in % (check)")
     public void discountPromoPercentTest() {
         page(QuickSalePage.class)
@@ -77,13 +86,23 @@ public class QuickSaleTests extends BaseTest {
                 .clickAddDiscount()
                 .chooseDiscountType(ValuesDB.getTitlePercent())
                 .clickSaveDiscount()
-                .checkDiscountInRow(String.format(Locale.ENGLISH, "%(.2f", parseDouble(ValuesDB.getValuePercent())) + "%")
                 .payByCheck()
                 .getHeader()
                 .clickPayments();
         page(PaymentsPage.class)
                 .checkCheckResult()
-                .checkPercentDiscountResult(ValuesDB.getSum(), valuePercent);
+                .checkPercentDiscountResult(ValuesDB.getSum(), ValuesDB.getValuePercent());
+    }
+
+    @Test
+    @DisplayName("Sale products with promocode in $")
+    public void discountInRowPromoDollarTest() {
+        page(QuickSalePage.class)
+                .addSKU(ValuesDB.getSku())
+                .clickAddDiscount()
+                .chooseDiscountType(ValuesDB.getTitleDollar())
+                .clickSaveDiscount()
+                .checkDiscountInRow("$" + String.format(Locale.ENGLISH, "%(.2f", parseDouble(ValuesDB.getValueDollar())));
     }
 
     @Test
@@ -94,13 +113,12 @@ public class QuickSaleTests extends BaseTest {
                 .clickAddDiscount()
                 .chooseDiscountType(ValuesDB.getTitleDollar())
                 .clickSaveDiscount()
-                .checkDiscountInRow("$" + String.format(Locale.ENGLISH, "%(.2f", parseDouble(ValuesDB.getValueDollar())))
                 .payByCheck()
                 .getHeader()
                 .clickPayments();
         page(PaymentsPage.class)
                 .checkCheckResult()
-                .checkDollarDiscountResult(ValuesDB.getSum(), valueDollar);
+                .checkDollarDiscountResult(ValuesDB.getSum(), ValuesDB.getValueDollar());
     }
 
     @Test
@@ -184,7 +202,7 @@ public class QuickSaleTests extends BaseTest {
     }
 
     @Test
-    @DisplayName("Sale not available product")
+    @DisplayName("Sale product from another store")
     public void saleNotAvailableProduct() {
         page(QuickSalePage.class)
                 .addSKU(ValuesDB.getFalseSku())

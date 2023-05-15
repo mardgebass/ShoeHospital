@@ -5,8 +5,6 @@ import com.codeborne.selenide.SelenideElement;
 import com.shoehospital.pages.base.BasePage;
 import io.qameta.allure.Step;
 
-import java.util.Locale;
-
 import static com.codeborne.selenide.Selectors.*;
 import static com.codeborne.selenide.Selenide.*;
 import static java.lang.Double.parseDouble;
@@ -14,36 +12,45 @@ import static org.openqa.selenium.Keys.ARROW_LEFT;
 
 public class PaymentsPage extends BasePage {
 
+    private final double taxRate = 1.0825;
+
     @Step("Scroll to the top")
     public PaymentsPage scrollTop() {
-        sleep(5000);
         $("#inputGroup-sizing-default-search").scrollIntoView("{block: \"center\"}");
         return this;
     }
 
     @Step("Click Refund button")
     public PaymentsPage clickRefund(String id, String amount) {
-//        $("#payment_search_search").setValue(amount).pressEnter();
+        $("#payment_search_search").setValue(amount).pressEnter();
         $(byId(id)).find(byText("Refund")).click();
         return this;
     }
 
     @Step("Fill Refund popup")
-    public PaymentsPage fillRefundPopup(String amount, String categories, String type) {
+    public PaymentsPage fillRefundPopup(String amount, String categories) {
+
         $(byName("refund_create_form[totalAmount]")).sendKeys(ARROW_LEFT, ARROW_LEFT, ARROW_LEFT, amount);
 
-        String thirdRefund = convert(Double.parseDouble(amount) / 6);
-        String residue = convert(Double.parseDouble(amount) - Double.parseDouble(thirdRefund) * 3);
+        String thirdRefund = rounding(Double.parseDouble(categories) / 6);
+        String residue = rounding(Double.parseDouble(categories) - Double.parseDouble(thirdRefund) * 3);
 
         $("#refund_create_form_shoeRepairAmount").sendKeys(ARROW_LEFT, ARROW_LEFT, ARROW_LEFT, residue);
         $("#refund_create_form_otherRetailAmount").sendKeys(ARROW_LEFT, ARROW_LEFT, ARROW_LEFT, thirdRefund);
         $("#refund_create_form_sundriesAmount").sendKeys(ARROW_LEFT, ARROW_LEFT, ARROW_LEFT, thirdRefund);
         $("#refund_create_form_salesTaxes").sendKeys(ARROW_LEFT, ARROW_LEFT, ARROW_LEFT, thirdRefund);
 
+        return this;
+    }
+
+    @Step("Choose payment type")
+    public PaymentsPage chooseType(String type) {
+
         $x(".//span[@class='select2-selection select2-selection--single form-select form-select-solid']").click();
         $x(".//span[@class='select2-container select2-container--bootstrap5 select2-container--open']").$(byText(type)).click();
 
         $("#refund_create_form_note").sendKeys("Autotest");
+
         return this;
     }
 
@@ -78,19 +85,19 @@ public class PaymentsPage extends BasePage {
 
     @Step("Check sum for two units of the same product")
     public void checkSum (String price){
-        String sum = convert((parseDouble(price)) * 2 * 1.0825);
+        String sum = rounding((parseDouble(price)) * 2 * taxRate);
         getRow().shouldHave(Condition.text(sum));
     }
 
     @Step("Check sum for one product")
     public void checkSumForOne (String price){
-        String sum = convert((parseDouble(price)) * 1.0825);
+        String sum = rounding((parseDouble(price)) * taxRate);
         getRow().shouldHave(Condition.text(sum));
     }
 
     @Step("Check sum for two units of the same product and one another")
     public void checkDoubleSum (String firstPrice, String secondPrice){
-        String sum = convert (((parseDouble(firstPrice)) * 2 + (parseDouble(secondPrice))) * 1.0825);
+        String sum = rounding (((parseDouble(firstPrice)) * 2 + (parseDouble(secondPrice))) * taxRate);
         getRow().shouldHave(Condition.text(sum));
     }
 
@@ -107,18 +114,14 @@ public class PaymentsPage extends BasePage {
     @Step("Check value in DCR after applying % discount")
     public void checkPercentDiscountResult(String price, String discount) {
         Double a = parseDouble(price) / 100 * parseDouble(discount);
-        String sum = convert(((parseDouble(price) - parseDouble(convert(a))) * 1.0825));
+        String sum = rounding(((parseDouble(price) - parseDouble(rounding(a))) * taxRate));
         getRow().shouldHave(Condition.text(sum));
     }
 
     @Step("Check value in DCR after applying $ discount")
     public void checkDollarDiscountResult(String price, String discount) {
-        String sum = convert((parseDouble(price) - parseDouble(discount)) * 1.0825);
+        String sum = rounding((parseDouble(price) - parseDouble(discount)) * taxRate);
         getRow().shouldHave(Condition.text(sum));
-    }
-
-    public String convert (Double value) {
-        return String.format(Locale.ENGLISH, "%(.2f", (value));
     }
 
     }

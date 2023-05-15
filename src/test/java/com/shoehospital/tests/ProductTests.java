@@ -90,6 +90,7 @@ public class ProductTests extends BaseTest {
     @Test
     @Severity(SeverityLevel.NORMAL)
     @DisplayName("Adding a product to the store")
+//    @RepeatedTest(10)
     public void addProductTest() {
         page(DashboardPage.class)
                 .getHeader()

@@ -5,7 +5,7 @@ import io.qameta.allure.Step;
 
 import static com.codeborne.selenide.Selectors.byAttribute;
 import static com.codeborne.selenide.Selenide.*;
-import static org.openqa.selenium.Keys.ARROW_RIGHT;
+import static org.openqa.selenium.Keys.ARROW_LEFT;
 
 public class SecondOrderStepPage extends BasePage {
 
@@ -30,8 +30,8 @@ public class SecondOrderStepPage extends BasePage {
 
     @Step("Add price {price}")
     public SecondOrderStepPage addPrice(String price){
-        $(byAttribute("data-attr","est_cost")).$x(".//input[@class='form-control formatCost']").sendKeys(ARROW_RIGHT, price);
-        sleep(1000);
+        sleep(2000);
+        $(byAttribute("data-attr","est_cost")).$x(".//input[@class='form-control formatCost']").sendKeys(ARROW_LEFT, ARROW_LEFT, ARROW_LEFT, price);
         return this;
     }
 
