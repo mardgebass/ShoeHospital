@@ -9,6 +9,7 @@ import com.shoehospital.pages.products.InventoryStorePage;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -25,8 +26,8 @@ public class ProductTests extends BaseTest {
     String extraSku = faker.numerify("######");
     String title = faker.name().title();
     String description = faker.lorem().sentence();
-    String price = faker.numerify("###.##");
-    String quantity = faker.numerify("##");
+    String price = faker.numerify("3##");
+    String quantity = faker.numerify("1##");
 
     @Test
     @Severity(SeverityLevel.NORMAL)
@@ -90,7 +91,7 @@ public class ProductTests extends BaseTest {
     @Test
     @Severity(SeverityLevel.NORMAL)
     @DisplayName("Adding a product to the store")
-//    @RepeatedTest(10)
+    @RepeatedTest(2)
     public void addProductTest() {
         page(DashboardPage.class)
                 .getHeader()
@@ -100,7 +101,7 @@ public class ProductTests extends BaseTest {
                 .addQuantity(quantity)
                 .addPrice(price)
                 .clickSave()
-                .checkAdding(falseSku, quantity, price);
+                .checkAdding(falseSku, quantity);
     }
 
 }

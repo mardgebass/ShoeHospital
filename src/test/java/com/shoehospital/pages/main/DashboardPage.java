@@ -15,17 +15,17 @@ public class DashboardPage extends BasePage {
         $x(".//tbody[@class='text-gray-600 fw-bold']").shouldHave(Condition.text(Id));
     }
 
-    @Step("Check Items on Shelf after test")
+    @Step("Items on Shelf after test")
     public void checkItemsOnShelf(String value) {
         $x(".//span[contains(text(), 'Items on Shelf')]").closest("div").closest("div").$x(".//span[@class='fw-bold fs-3x text-gray-800 lh-1 ls-n2']").shouldHave(text(value));
     }
 
-    @Step("Check Tickets In Progress after test")
+    @Step("Tickets In Progress after test")
     public void checkTicketsInProgress(String value) {
         $x(".//span[contains(text(), 'Repairs in Progress')]").closest("div").closest("div").$x(".//span[@class='fw-bold fs-3x text-gray-800 lh-1 ls-n2']").shouldHave(text(value));
     }
 
-    @Step("Check Tickets submitted today after test")
+    @Step("Tickets submitted today after test")
     public void checkTicketsToday(String value) {
         $x(".//span[contains(text(), 'Tickets submitted today')]").closest("div").closest("div").$x(".//span[@class='fw-bold fs-3x text-gray-800 lh-1 ls-n2']").shouldHave(text(value));
     }
@@ -36,7 +36,7 @@ public class DashboardPage extends BasePage {
         $x(".//span[contains(text(), 'Average price per ticket')]").closest("div").closest("div").$x(".//span[@class='fw-bold fs-3x text-gray-800 lh-1 ls-n2']").shouldHave(text(result));
     }
 
-    @Step("Check Tickets Without Details after test")
+    @Step("Tickets Without Details after test")
     public void checkTicketsWithoutDetails(String value) {
         $x(".//span[contains(text(), 'Tickets without details')]").closest("div").closest("div").$x(".//span[@class='fw-bold fs-3x text-gray-800 lh-1 ls-n2']").shouldHave(text(value));
     }

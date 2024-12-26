@@ -18,21 +18,21 @@ import static com.shoehospital.database.ValuesDB.notWatching;
 public class DashboardTests extends BaseTest {
 
     @Test
-    @DisplayName("Tablet Items on Shelf")
+    @DisplayName("Items on Shelf")
     public void pendingPickUpTicketTest() {
         page(DashboardPage.class)
                 .checkItemsOnShelf(TicketsAmountOnDashboard.getOnShelf());
     }
 
     @Test
-    @DisplayName("Tablet Repairs in progress")
+    @DisplayName("Repairs in progress")
     public void inProgressTabletTest() {
         page(DashboardPage.class)
                 .checkTicketsInProgress(TicketsAmountOnDashboard.getInProgress());
     }
 
     @Test
-    @DisplayName("Tablet Tickets Submitted Today")
+    @DisplayName("Tickets Submitted Today")
     public void TicketsTodayTabletTest() {
         page(DashboardPage.class)
                 .checkTicketsToday(TicketsAmountOnDashboard.getToday());
@@ -46,7 +46,7 @@ public class DashboardTests extends BaseTest {
     }
 
     @Test
-    @DisplayName("Tablet Tickets Without Details")
+    @DisplayName("Tickets Without Details")
     public void WithoutDetailsTabletTest() {
         page(DashboardPage.class)
                 .checkTicketsWithoutDetails(TicketsAmountOnDashboard.getWithoutDetails());

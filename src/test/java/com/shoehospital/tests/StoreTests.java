@@ -24,7 +24,6 @@ public class StoreTests extends BaseTest{
     @Test
     @Severity(SeverityLevel.NORMAL)
     @DisplayName("Shop creation")
-//    @RepeatedTest(6)
     public void createShopTest() {
         page(DashboardPage.class)
                 .getHeader()

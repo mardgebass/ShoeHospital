@@ -9,7 +9,7 @@ import static com.codeborne.selenide.Selenide.$$x;
 
 public class RefundsPage extends BasePage {
 
-    @Step("Check sum of refund")
+    @Step("sum of refund")
     public RefundsPage checkSumOfRefund(String price) {
         getRow().shouldHave(Condition.text(price));
         return this;

@@ -8,7 +8,7 @@ import java.security.SecureRandom;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
-import static org.openqa.selenium.Keys.ARROW_RIGHT;
+import static org.openqa.selenium.Keys.ARROW_LEFT;
 
 public class CreateProductPage extends BasePage {
 
@@ -61,7 +61,7 @@ public class CreateProductPage extends BasePage {
 
     @Step("Add price")
     public CreateProductPage addPrice(String price) {
-        $("#edit_product_form_retailPrice").sendKeys(ARROW_RIGHT, price);
+        $("#edit_product_form_retailPrice").sendKeys(ARROW_LEFT, price);
         return this;
     }
 

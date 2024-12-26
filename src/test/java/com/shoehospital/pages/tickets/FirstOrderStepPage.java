@@ -16,6 +16,20 @@ public class FirstOrderStepPage extends BasePage {
         return this;
     }
 
+    @Step("Fill the form by {phone}")
+    public FirstOrderStepPage fillPhone(String phone) {
+        $("#customer_form_phone").sendKeys(phone);
+        $("#customer_form_declinedEmail").click();
+        return this;
+    }
+
+    @Step("Fill the form by {email}")
+    public FirstOrderStepPage fillEmail(String email) {
+        $("#customer_form_email").sendKeys(email);
+        $("#customer_form_declinedPhone").click();
+        return this;
+    }
+
     @Step("Fill the form by phone {phone}")
     public FirstOrderStepPage fillFormExistingPhone(String phone) {
         $("#customer_form_phone").sendKeys(phone);
@@ -30,9 +44,9 @@ public class FirstOrderStepPage extends BasePage {
 
     @Step("Confirm using the user")
     public void clickYes() {
-        sleep(1500);
+        sleep(2000);
         $("#customer-agreement-button").click();
-        $("#fake-continue").click();
+//        $("#fake-continue").click();
     }
 
 }

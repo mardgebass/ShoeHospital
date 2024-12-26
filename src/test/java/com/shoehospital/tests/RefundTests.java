@@ -25,14 +25,14 @@ public class RefundTests extends BaseTest {
 
     @Test
     @Severity(SeverityLevel.NORMAL)
-    @DisplayName("Make a refund in cash")
+    @DisplayName("Refund in cash")
     public void makeRefundByCash() {
         page(DashboardPage.class)
                 .getHeader()
                 .clickPayments();
         page(PaymentsPage.class)
                 .clickRefund(ValuesDB.getPaymentIdWithoutRefund(), ValuesDB.getAmountFromPayments())
-                .fillRefundPopup(amountById, amountById)
+                .fillShoeRepair(amountById)
                 .chooseType("Cash")
                 .clickSave()
                 .scrollTop()
@@ -43,14 +43,14 @@ public class RefundTests extends BaseTest {
 
     @Test
     @Severity(SeverityLevel.NORMAL)
-    @DisplayName("Make a refund by card")
+    @DisplayName("Refund by card")
     public void makeRefundByCard() {
         page(DashboardPage.class)
                 .getHeader()
                 .clickPayments();
         page(PaymentsPage.class)
                 .clickRefund(ValuesDB.getPaymentIdWithoutRefund(), ValuesDB.getAmountFromPayments())
-                .fillRefundPopup(amountById, amountById)
+                .fillSundriesPopup(amountById)
                 .chooseType("Card")
                 .clickSave()
                 .scrollTop()
@@ -61,14 +61,14 @@ public class RefundTests extends BaseTest {
 
     @Test
     @Severity(SeverityLevel.NORMAL)
-    @DisplayName("Make a refund by check")
+    @DisplayName("Refund by check")
     public void makeRefundByCheck() {
         page(DashboardPage.class)
                 .getHeader()
                 .clickPayments();
         page(PaymentsPage.class)
                 .clickRefund(ValuesDB.getPaymentIdWithoutRefund(), ValuesDB.getAmountFromPayments())
-                .fillRefundPopup(amountById, amountById)
+                .fillRefundPopup(amountById)
                 .chooseType("Check")
                 .clickSave()
                 .scrollTop()
@@ -79,14 +79,14 @@ public class RefundTests extends BaseTest {
 
     @Test
     @Severity(SeverityLevel.NORMAL)
-    @DisplayName("Make a partial refund by check")
+    @DisplayName("Partial refund by check")
     public void partialRefund() {
         page(DashboardPage.class)
                 .getHeader()
                 .clickPayments();
         page(PaymentsPage.class)
                 .clickRefund(ValuesDB.getPaymentIdWithoutRefund(), ValuesDB.getAmountFromPayments())
-                .fillRefundPopup((String.valueOf((Float.parseFloat(amountById)) / number)), (String.valueOf((Float.parseFloat(amountById)) / number)))
+                .fillRefundPopup((String.valueOf((Float.parseFloat(amountById)) / number)))
                 .chooseType("Check")
                 .clickSave()
                 .scrollTop()
@@ -97,30 +97,14 @@ public class RefundTests extends BaseTest {
 
     @Test
     @Severity(SeverityLevel.NORMAL)
-    @DisplayName("Make a refund without Amount")
-    public void makeRefundWithoutAmount() {
-        page(DashboardPage.class)
-                .getHeader()
-                .clickPayments();
-        page(PaymentsPage.class)
-                .scrollTop()
-                .clickRefund(ValuesDB.getPaymentIdWithoutRefund(), ValuesDB.getAmountFromPayments())
-                .fillRefundPopup("0", amountById)
-                .chooseType("Check")
-                .clickSave()
-                .checkEqualError();
-    }
-
-    @Test
-    @Severity(SeverityLevel.NORMAL)
-    @DisplayName("Make a refund with wrong amount")
+    @DisplayName("Refund with wrong amount")
     public void makeRefundWithErrorSum() {
         page(DashboardPage.class)
                 .getHeader()
                 .clickPayments();
         page(PaymentsPage.class)
                 .clickRefund(ValuesDB.getPaymentIdWithoutRefund(), ValuesDB.getAmountFromPayments())
-                .fillRefundPopup((String.valueOf(Float.parseFloat(amountById) + number)), amountById)
+                .fillRefundPopup((String.valueOf(Float.parseFloat(amountById) * number)))
                 .chooseType("Check")
                 .clickSave()
                 .checkEqualError();

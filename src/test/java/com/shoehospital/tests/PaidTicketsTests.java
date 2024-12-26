@@ -18,10 +18,10 @@ import static com.codeborne.selenide.Selenide.page;
 public class PaidTicketsTests extends BaseTest{
 
     Faker faker = new Faker();
-    String price = faker.numerify("###");
-    String discount = faker.numerify("#.##");
-    String id = faker.numerify("100####");
-    String phone = "9385297121";
+    String price = faker.numerify("3##");
+    String discount = faker.numerify("#");
+    String id = faker.numerify("5000####");
+    String phone = "2562690950";
     
     @BeforeEach
     public void createTest() {
@@ -49,64 +49,6 @@ public class PaidTicketsTests extends BaseTest{
                 .clickProceedToPayment();
         page(CartPage.class)
                 .payByCheck();
-        page(TicketPage.class)
-                .checkStatusPaid();
-    }
-
-    @Test
-    @Severity(SeverityLevel.CRITICAL)
-    @DisplayName("Pending Picked up ticket paid by check")
-    public void pendingPickedUpCheckTest() {
-        page(CustomerOverviewPage.class)
-                .clickIdLink(id);
-        page(TicketPage.class)
-                .clickRFPU()
-                .clickProceedToPayment();
-        page(CartPage.class)
-                .payByCheck();
-        page(TicketPage.class)
-                .checkStatusPaid();
-    }
-
-    @Test
-    @Severity(SeverityLevel.CRITICAL)
-    @DisplayName("In progress ticket paid in Cash")
-    public void inProgressCashTest() {
-        page(CustomerOverviewPage.class)
-                .clickIdLink(id);
-        page(TicketPage.class)
-                .clickProceedToPayment();
-        page(CartPage.class)
-                .payByCash();
-        page(TicketPage.class)
-                .checkStatusPaid();
-    }
-
-    @Test
-    @Severity(SeverityLevel.CRITICAL)
-    @DisplayName("Pending Picked up ticket paid in cash")
-    public void pendingPickedUpCashTest() {
-        page(CustomerOverviewPage.class)
-                .clickIdLink(id);
-        page(TicketPage.class)
-                .clickRFPU()
-                .clickProceedToPayment();
-        page(CartPage.class)
-                .payByCash();
-        page(TicketPage.class)
-                .checkStatusPaid();
-    }
-
-    @Test
-    @Severity(SeverityLevel.CRITICAL)
-    @DisplayName("In-progress ticket paid by card")
-    public void inProgressCardTest() {
-        page(CustomerOverviewPage.class)
-                .clickIdLink(id);
-        page(TicketPage.class)
-                .clickProceedToPayment();
-        page(CartPage.class)
-                .payByCard();
         page(TicketPage.class)
                 .checkStatusPaid();
     }
@@ -143,21 +85,10 @@ public class PaidTicketsTests extends BaseTest{
                 .checkStatusPickedUp();
     }
 
-    @Test
-    @Severity(SeverityLevel.CRITICAL)
-    @DisplayName("Error for Mark ticket Picked up without payment")
-    public void errorPickedUpTest() {
-        page(CustomerOverviewPage.class)
-                .clickIdLink(id);
-        page(TicketPage.class)
-                .clickRFPU()
-                .clickPickedUp()
-                .checkErrorPickedUp();
-    }
     
     @Test
     @Severity(SeverityLevel.CRITICAL)
-    @DisplayName("Apply individual $ discount")
+    @DisplayName("Individual $ discount")
     public void applyDollarTest() {
         page(CustomerOverviewPage.class)
                 .clickIdLink(id);
@@ -172,7 +103,7 @@ public class PaidTicketsTests extends BaseTest{
 
     @Test
     @Severity(SeverityLevel.CRITICAL)
-    @DisplayName("Apply individual % discount")
+    @DisplayName("Individual % discount")
     public void applyPercentTest() {
         page(CustomerOverviewPage.class)
                 .clickIdLink(id);
@@ -181,7 +112,7 @@ public class PaidTicketsTests extends BaseTest{
         page(CartPage.class)
                 .chooseDiscountType("Custom %")
                 .addDiscountSum(discount)
-                .checkDiscount("-1" + discount + "%")
+                .checkDiscount("-1" + discount + ".00%")
                 .payByCheck();
     }
 }

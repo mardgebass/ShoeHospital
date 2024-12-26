@@ -5,36 +5,37 @@ import com.shoehospital.pages.base.BasePage;
 import io.qameta.allure.Step;
 import org.openqa.selenium.Keys;
 
+import static com.codeborne.selenide.Condition.exactValue;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
 import static org.openqa.selenium.Keys.ARROW_LEFT;
-import static org.openqa.selenium.Keys.DELETE;
 
 public class QuickSalePage extends BasePage {
 
     @Step("Add SKU {SKU}")
     public QuickSalePage addSKU (String SKU){
         $("#product-sku-input").setValue(SKU).pressEnter();
+        sleep(2000);
         return this;
     }
 
-    @Step("Check alert {payment completed}")
+    @Step("alert {payment completed}")
     public QuickSalePage checkAlert(){
         $("#toast-container").shouldHave(Condition.text("Payment completed"));
         return this;
     }
 
-    @Step("Check alert {Product not found}")
-    public QuickSalePage checkErrorAlert(){
-        $("#toast-container").shouldHave(Condition.text("Product not found"));
+    @Step("alert {Product not found}")
+    public QuickSalePage clickConfirm(){
+        sleep(2000);
+        $("#confirm_custom_product").$("#confirm_custom_product_yes").click();
         return this;
     }
 
-    @Step("Check empty field")
-    public void checkEmptyField (){
-        $("#product-sku-input").shouldHave(Condition.empty);
-        $x(".//button[@class='toast-close-button']").click();
+    @Step("barcode in SKU field")
+    public void checkSkuField(String Sku){
+        $x(".//input[@class='form-control form-control-solid']").shouldHave(exactValue(Sku));
     }
 
     @Step("Edit Quantity to 2")
@@ -73,14 +74,15 @@ public class QuickSalePage extends BasePage {
 
     @Step("Choose Discount Type")
     public QuickSalePage chooseDiscountType(String type) {
-        $x(".//span[@class='select2-selection select2-selection--single form-select']").click();
+        $("#select2-discount_form_promocode-container").click();
         $("#select2-discount_form_promocode-results").$(byText(type)).click();
         return this;
     }
 
     @Step("Add sum of discount")
     public QuickSalePage addDiscountSum(String percent) {
-        $("#discount_form_value").sendKeys(ARROW_LEFT, ARROW_LEFT, ARROW_LEFT, ARROW_LEFT, DELETE, percent);
+        $("#discount_form_value").sendKeys(Keys.CONTROL + "a", Keys.BACK_SPACE);
+        $("#discount_form_value").sendKeys(percent);
         return this;
     }
 
@@ -94,4 +96,8 @@ public class QuickSalePage extends BasePage {
         return this;
     }
 
+    public QuickSalePage setPrice(String price) {
+        $x(".//input[@class='custom-price-field form-control']").sendKeys(ARROW_LEFT, ARROW_LEFT, ARROW_LEFT, price);
+        return this;
+    }
 }

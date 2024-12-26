@@ -10,23 +10,28 @@ import java.util.List;
 public class ValuesDB {
 
     static String requestSku = "SELECT b.barcode FROM stores_products s JOIN barcodes b ON s.product_id = b.product_id " +
-            "WHERE store_id = " + TestConfigDB.testConfig.storeId() + " AND hide = 0";
+            "WHERE store_id = " + TestConfigDB.testConfig.storeId() + " AND hide = 0 AND sale_price > 9";
 
     static String requestSum = "SELECT s.sale_price FROM stores_products s JOIN barcodes b ON s.product_id = b.product_id " +
             "WHERE store_id = " + TestConfigDB.testConfig.storeId() + " AND barcode = ";
+
+//    static String requestNotAvailableSku = "SELECT b.barcode FROM product_region s LEFT OUTER JOIN stores_products p " +
+//            "ON s.product_id = p.product_id JOIN barcodes b ON s.product_id = b.product_id " +
+//            "WHERE region_id = 2 AND store_id <> " + TestConfigDB.testConfig.storeId();
+
 
     static String requestNotAvailableSku = "SELECT b.barcode FROM product_region s LEFT OUTER JOIN stores_products p " +
             "ON s.product_id = p.product_id JOIN barcodes b ON s.product_id = b.product_id " +
             "WHERE region_id = 2 AND store_id is null";
 
-    static String requestPaymentIdWithoutRefunds = "SELECT id FROM app.payments WHERE refunds_amount = 0 AND store_id = " + TestConfigDB.testConfig.storeId();
+    static String requestPaymentIdWithoutRefunds = "SELECT id FROM app.payments WHERE refunds_amount = 0 AND amount > 1 AND store_id = " + TestConfigDB.testConfig.storeId();
     static String requestAmountFromPayments = "SELECT total_amount FROM app.payments WHERE id = ";
     static String requestAmountFromRefunds = "SELECT total_amount FROM app.refunds WHERE payment_id = ";
     static String requestTitle = "SELECT title FROM app.promocode WHERE is_active=1 AND is_service=0 AND is_percent=";
     
     static String requestPromoValue = "SELECT price FROM app.promocode WHERE title = ";
 
-    static String requestNotWatching = "SELECT ticket_barcode FROM app.tickets where store_id = " + TestConfigDB.testConfig.storeId() + " and watching is null and status <> 'Ordering' and status <> 'Completed';";
+    static String requestNotWatching = "SELECT ticket_barcode FROM app.tickets where store_id = " + TestConfigDB.testConfig.storeId() + " and watching is null and status <> 'Ordering' and status <> 'Completed' and status <> 'Unclaimed';";
 
     public static String falseSku;
     public static String amountById;
@@ -81,7 +86,7 @@ public class ValuesDB {
     }
 
     public static String getSecondSku() {
-        secondSku = getDataBaseValue(requestSku + "AND b.barcode <> " + sku, "barcode");
+        secondSku = getDataBaseValue(requestSku + " AND b.barcode <> " + sku, "barcode");
         return secondSku;
     }
 
@@ -89,9 +94,7 @@ public class ValuesDB {
         falseSku = getDataBaseValue(requestNotAvailableSku, "barcode");
         return falseSku;
     }
-    
 
-//    sums
     public static String getSum() {
         return getDataBaseValue(requestSum + sku, "sale_price");
     }

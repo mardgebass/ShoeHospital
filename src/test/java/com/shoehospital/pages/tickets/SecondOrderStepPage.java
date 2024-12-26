@@ -11,15 +11,16 @@ public class SecondOrderStepPage extends BasePage {
 
     @Step("Add ticket {ticket}")
     public SecondOrderStepPage addTicketId(String ticket){
-        $("#ticket_collection_form_tickets_2_ticketBarcode").setValue(ticket).pressEnter();
+        $("#ticket_collection_create_form_tickets_2_ticketBarcode").setValue(ticket).pressEnter();
         sleep(1000);
         return this;
     }
 
     @Step("Click Finish")
-    public SecondOrderStepPage clickFinish(){
-        $("#ticket_collection_form_finish").click();
-        return this;
+    public void clickFinish(){
+        $("#fake-finish").click();
+        $("#ticket-sequence-agreement-button").click();
+//        $("#ticket-sequence-agreement-button").click();
     }
 
 //    @Step("Click CWR")

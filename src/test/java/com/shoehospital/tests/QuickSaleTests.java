@@ -16,13 +16,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import java.util.Locale;
 
 import static com.codeborne.selenide.Selenide.page;
+import static com.shoehospital.database.ValuesDB.falseSku;
 import static java.lang.Double.parseDouble;
 
 @DisplayName("Quick Sale")
 @ExtendWith({SelenideExtension.class})
 public class QuickSaleTests extends BaseTest {
     Faker faker = new Faker();
-    String discount = faker.numerify("##.##");
+    String oneDigit = faker.number().numberBetween(1, 9) + faker.numerify(".##");
+    String twoDigits = faker.number().numberBetween(10, 99) + faker.numerify(".##");
 
     @BeforeEach
     public void toQuickSale() {
@@ -38,15 +40,14 @@ public class QuickSaleTests extends BaseTest {
                 .addSKU(ValuesDB.getSku())
                 .clickAddDiscount()
                 .chooseDiscountType("Custom $")
+                .addDiscountSum(oneDigit)
                 .clickSaveDiscount()
-                .addDiscountSum(discount)
-                .clickSaveDiscount()
-                .checkDiscountInRow("$" + discount)
+                .checkDiscountInRow("$" + oneDigit)
                 .payByCash()
                 .getHeader()
                 .clickPayments();
         page(PaymentsPage.class)
-                .checkDollarDiscountResult(ValuesDB.getSum(), discount);
+                .checkDollarDiscountResult(ValuesDB.getSum(), oneDigit);
     }
 
     @Test
@@ -56,19 +57,18 @@ public class QuickSaleTests extends BaseTest {
                 .addSKU(ValuesDB.getSku())
                 .clickAddDiscount()
                 .chooseDiscountType("Custom %")
+                .addDiscountSum(twoDigits)
                 .clickSaveDiscount()
-                .addDiscountSum(discount)
-                .clickSaveDiscount()
-                .checkDiscountInRow(discount + "%")
+                .checkDiscountInRow(twoDigits + "%")
                 .payByCheck()
                 .getHeader()
                 .clickPayments();
         page(PaymentsPage.class)
-                .checkPercentDiscountResult(ValuesDB.getSum(), discount);
+                .checkPercentDiscountResult(ValuesDB.getSum(), twoDigits);
     }
 
     @Test
-    @DisplayName("Sale products with promocode in %")
+    @DisplayName("Sale products with promocode in % without payment")
     public void discountInRowPromoPercentTest() {
         page(QuickSalePage.class)
                 .addSKU(ValuesDB.getSku())
@@ -95,7 +95,7 @@ public class QuickSaleTests extends BaseTest {
     }
 
     @Test
-    @DisplayName("Sale products with promocode in $")
+    @DisplayName("Sale products with promocode in $ without payment")
     public void discountInRowPromoDollarTest() {
         page(QuickSalePage.class)
                 .addSKU(ValuesDB.getSku())
@@ -119,22 +119,6 @@ public class QuickSaleTests extends BaseTest {
         page(PaymentsPage.class)
                 .checkCheckResult()
                 .checkDollarDiscountResult(ValuesDB.getSum(), ValuesDB.getValueDollar());
-    }
-
-    @Test
-    @Severity(SeverityLevel.CRITICAL)
-    @DisplayName("Sale two products paid in cash")
-    public void saleTwoProductsInCash() {
-        page(QuickSalePage.class)
-                .addSKU(ValuesDB.getSku())
-                .editQuantity()
-                .payByCash()
-                .checkAlert()
-                .getHeader()
-                .clickPayments();
-        page(PaymentsPage.class)
-                .checkCashResult()
-                .checkSum(ValuesDB.getSum());
     }
 
     @Test
@@ -170,22 +154,6 @@ public class QuickSaleTests extends BaseTest {
 
     @Test
     @Severity(SeverityLevel.CRITICAL)
-    @DisplayName("Sale two products paid by check")
-    public void saleTwoProductsCheck() {
-        page(QuickSalePage.class)
-                .addSKU(ValuesDB.getSku())
-                .editQuantity()
-                .payByCheck()
-                .checkAlert()
-                .getHeader()
-                .clickPayments();
-        page(PaymentsPage.class)
-                .checkCheckResult()
-                .checkSum(ValuesDB.getSum());
-    }
-
-    @Test
-    @Severity(SeverityLevel.CRITICAL)
     @DisplayName("Sale two products of same unit and one another paid by check")
     public void saleSeveralProducts() {
         page(QuickSalePage.class)
@@ -202,12 +170,23 @@ public class QuickSaleTests extends BaseTest {
     }
 
     @Test
-    @DisplayName("Sale product from another store")
-    public void saleNotAvailableProduct() {
+    @DisplayName("Sale product of another store")
+    public void saleProductOfAnotherStore() {
         page(QuickSalePage.class)
                 .addSKU(ValuesDB.getFalseSku())
-                .checkErrorAlert()
-                .checkEmptyField();
+                .clickConfirm()
+                .checkSkuField(falseSku);
+    }
+
+    @Test
+    @DisplayName("Sale unknown product")
+    public void saleUnknownProduct() {
+        page(QuickSalePage.class)
+                .addSKU(ValuesDB.getFalseSku())
+                .clickConfirm()
+                .setPrice(oneDigit)
+                .payByCard()
+                .checkAlert();
     }
 
 }

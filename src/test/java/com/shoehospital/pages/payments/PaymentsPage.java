@@ -27,26 +27,37 @@ public class PaymentsPage extends BasePage {
         return this;
     }
 
+    @Step("Fill Refund popup with Shoe Repair")
+    public PaymentsPage fillShoeRepair(String categories) {
+        String thirdRefund = rounding(Double.parseDouble(categories) * 0.92378753);
+        $("#refund_create_form_shoeRepairAmount").sendKeys(ARROW_LEFT, ARROW_LEFT, ARROW_LEFT, thirdRefund);
+        return this;
+    }
+
     @Step("Fill Refund popup")
-    public PaymentsPage fillRefundPopup(String amount, String categories) {
+    public PaymentsPage fillRefundPopup(String categories) {
 
-        $(byName("refund_create_form[totalAmount]")).sendKeys(ARROW_LEFT, ARROW_LEFT, ARROW_LEFT, amount);
-
-        String thirdRefund = rounding(Double.parseDouble(categories) / 6);
+        String thirdRefund = rounding(Double.parseDouble(categories) * 0.92378753 / 3);
         String residue = rounding(Double.parseDouble(categories) - Double.parseDouble(thirdRefund) * 3);
 
-        $("#refund_create_form_shoeRepairAmount").sendKeys(ARROW_LEFT, ARROW_LEFT, ARROW_LEFT, residue);
+        $("#refund_create_form_shoeRepairAmount").sendKeys(ARROW_LEFT, ARROW_LEFT, ARROW_LEFT, thirdRefund);
         $("#refund_create_form_otherRetailAmount").sendKeys(ARROW_LEFT, ARROW_LEFT, ARROW_LEFT, thirdRefund);
-        $("#refund_create_form_sundriesAmount").sendKeys(ARROW_LEFT, ARROW_LEFT, ARROW_LEFT, thirdRefund);
-        $("#refund_create_form_salesTaxes").sendKeys(ARROW_LEFT, ARROW_LEFT, ARROW_LEFT, thirdRefund);
+        $("#refund_create_form_sundriesAmount").sendKeys(ARROW_LEFT, ARROW_LEFT, ARROW_LEFT, residue);
 
+        return this;
+    }
+
+    @Step("Fill Refund popup")
+    public PaymentsPage fillSundriesPopup(String categories) {
+        String thirdRefund = rounding(Double.parseDouble(categories) * 0.92378753);
+        $("#refund_create_form_sundriesAmount").sendKeys(ARROW_LEFT, ARROW_LEFT, ARROW_LEFT, thirdRefund);
         return this;
     }
 
     @Step("Choose payment type")
     public PaymentsPage chooseType(String type) {
 
-        $x(".//span[@class='select2-selection select2-selection--single form-select form-select-solid']").click();
+        $x(".//span[@class='select2-selection select2-selection--single form-select']").click();
         $x(".//span[@class='select2-container select2-container--bootstrap5 select2-container--open']").$(byText(type)).click();
 
         $("#refund_create_form_note").sendKeys("Autotest");
@@ -65,43 +76,37 @@ public class PaymentsPage extends BasePage {
         $x(".//div[@class='card-header']").$x(".//a[@class='nav-link']").click();
     }
 
-    @Step("Check type of payment Cash")
-    public PaymentsPage checkCashResult () {
-        getRow().shouldHave(Condition.text("Cash"));
-        return new PaymentsPage();
-    }
-
-    @Step("Check type of payment Check")
+    @Step("type of payment Check")
     public PaymentsPage checkCheckResult () {
         getRow().shouldHave(Condition.text("Check"));
         return new PaymentsPage();
     }
 
-    @Step("Check type of payment Cash")
+    @Step("type of payment Cash")
     public PaymentsPage checkCardResult () {
         getRow().shouldHave(Condition.text("Card"));
         return new PaymentsPage();
     }
 
-    @Step("Check sum for two units of the same product")
+    @Step("sum for two units of the same product")
     public void checkSum (String price){
         String sum = rounding((parseDouble(price)) * 2 * taxRate);
         getRow().shouldHave(Condition.text(sum));
     }
 
-    @Step("Check sum for one product")
+    @Step("sum for one product")
     public void checkSumForOne (String price){
         String sum = rounding((parseDouble(price)) * taxRate);
         getRow().shouldHave(Condition.text(sum));
     }
 
-    @Step("Check sum for two units of the same product and one another")
+    @Step("sum for two units of the same product and one another")
     public void checkDoubleSum (String firstPrice, String secondPrice){
         String sum = rounding (((parseDouble(firstPrice)) * 2 + (parseDouble(secondPrice))) * taxRate);
         getRow().shouldHave(Condition.text(sum));
     }
 
-    @Step("Check error")
+    @Step("error")
     public void checkEqualError () {
         $("#toast-container").shouldBe(Condition.visible);
         $("#refund-create-modal").$x(".//span[@class='svg-icon svg-icon-2x']").click();
@@ -111,14 +116,14 @@ public class PaymentsPage extends BasePage {
         return $$x(".//tr[@class='odd']").get(0);
     }
 
-    @Step("Check value in DCR after applying % discount")
+    @Step("value on Payments page DCR after applying % discount")
     public void checkPercentDiscountResult(String price, String discount) {
         Double a = parseDouble(price) / 100 * parseDouble(discount);
         String sum = rounding(((parseDouble(price) - parseDouble(rounding(a))) * taxRate));
         getRow().shouldHave(Condition.text(sum));
     }
 
-    @Step("Check value in DCR after applying $ discount")
+    @Step("value on Payments page after applying $ discount")
     public void checkDollarDiscountResult(String price, String discount) {
         String sum = rounding((parseDouble(price) - parseDouble(discount)) * taxRate);
         getRow().shouldHave(Condition.text(sum));

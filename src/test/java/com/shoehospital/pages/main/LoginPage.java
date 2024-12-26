@@ -17,12 +17,12 @@ public class LoginPage extends BasePage {
         return new LoginPage();
     }
 
-    @Step("Check error message {error} ")
+    @Step("error message {error} ")
     public void checkError(String error) {
         $x(".//div[@class='alert alert-danger']").shouldHave(Condition.text(error));
     }
 
-    @Step("Check Logout")
+    @Step("Logout")
     public void checkLogout() {
         $("#username").shouldBe(Condition.visible);
         $("#password").shouldBe(Condition.visible);

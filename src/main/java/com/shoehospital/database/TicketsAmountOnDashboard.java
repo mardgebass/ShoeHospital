@@ -8,7 +8,7 @@ import java.util.List;
 
 public class TicketsAmountOnDashboard {
 
-    static String requestCommon = "SELECT COUNT(*) FROM app.tickets where store_id = " + TestConfigDB.testConfig.storeId();
+    static String requestCommon = "SELECT COUNT(*) FROM app.tickets where store_id = " + TestConfigDB.testConfig.storeId() + " and canceled = 0 and status != 'Ordering' ";
     private static Connection connection;
     private static Statement statement;
     static String resultValue;
@@ -50,10 +50,10 @@ public class TicketsAmountOnDashboard {
     }
 
     public static String getInProgress() {
-        return getDataBaseValue(requestCommon + " and status = 'In-Progress'");
+        return getDataBaseValue(requestCommon + " and (status = 'In-Progress' or status = 'Dye in Houston')");
     }
 
     public static String getWithoutDetails() {
-        return getDataBaseValue(requestCommon + " and ticket_details_id IS NULL and status = 'In-Progress'");
+        return getDataBaseValue(requestCommon + " and ticket_details_id IS NULL and (status = 'In-Progress' or status = 'Dye in Houston')");
     }
 }

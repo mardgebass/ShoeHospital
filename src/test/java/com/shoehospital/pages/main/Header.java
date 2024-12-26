@@ -11,10 +11,10 @@ import static com.codeborne.selenide.Selenide.$x;
 public class Header {
 
     private SelenideElement navigateTo() {
-        return $x(".//span[@class='menu-link py-3 fs-5']");
+        return $x(".//span[@class='menu-link py-3 gap-4']");
     }
 
-    @Step("Check Login")
+    @Step("Login")
     public void checkLogin() {
         navigateTo().shouldBe(Condition.visible);
     }
@@ -52,7 +52,7 @@ public class Header {
     @Step("Navigate to Payments")
     public void clickPayments() {
         navigateTo().click();
-        $(byText("Payments")).click();
+        $(byText("Payments / Refunds")).click();
     }
 
     @Step("Navigate to DCR")
@@ -76,15 +76,15 @@ public class Header {
     @Step("Enter search request")
     public Header enterSearchRequest(String id) {
         $x(".//div[@class='btn btn-icon btn-icon-muted btn-active-light btn-active-color-primary w-30px h-30px w-md-40px h-md-40px']").click();
-        $(byName("search")).sendKeys(id);
+        $(byName("quick-search")).sendKeys(id);
         $x(".//div[@class='d-flex flex-column']").$(byText("#" + id)).click();
         return this;
     }
 
-    @Step("Check search results")
+    @Step("search results")
     public void checkSearchResults(String id) {
         $x(".//div[@class='btn btn-icon btn-icon-muted btn-active-light btn-active-color-primary w-30px h-30px w-md-40px h-md-40px']").click();
-        $(byName("search")).sendKeys(id);
+        $(byName("quick-search")).sendKeys(id);
         $x(".//div[@class='menu menu-sub menu-sub-dropdown p-7 w-325px w-md-375px show']").shouldHave(Condition.text("No result found"));
     }
 

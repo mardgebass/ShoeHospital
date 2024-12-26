@@ -6,8 +6,7 @@ import io.qameta.allure.Step;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byText;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.$x;
+import static com.codeborne.selenide.Selenide.*;
 
 public class TicketPage extends BasePage {
 
@@ -36,59 +35,54 @@ public class TicketPage extends BasePage {
         return this;
     }
 
-    @Step("Check Status Picked up")
+    @Step("Status Picked up")
     public void checkStatusPickedUp() {
         $x(".//div[@class=' d-flex align-items-center flex-row justify-content-end me-5']").shouldHave(text("Picked up"));
     }
 
-    @Step("Check Status Paid")
-    public TicketPage checkStatusPaid() {
+    @Step("Status Paid")
+    public void checkStatusPaid() {
         $x(".//span[@class='badge badge-light-success']").shouldHave(text("Paid"));
-        return this;
     }
 
-    @Step("Check Status Pending")
+    @Step("Status Pending")
     public TicketPage checkPaymentStatusPending() {
         $x(".//span[@class='badge badge-light-warning']").shouldBe(Condition.visible);
         return this;
     }
 
-    @Step("Check text \"Ticket created\" in Audit History")
+    @Step("text \"Ticket created\" in Audit History")
     public TicketPage checkCreatedHistory() {
         $("#table_body").shouldHave(text("Ticket created"));
         return this;
     }
 
-    @Step("Check text \"Ticket marked: Pending Pick Up\" in Audit History")
+    @Step("text \"Ticket marked: Pending Pick Up\" in Audit History")
     public void checkRFPUHistory() {
         $("#table_body").shouldHave(text("Ticket marked: Pending Pick Up"));
     }
 
-    @Step("Check text \"Ticket closed: Picked up\" in Audit History")
+    @Step("text \"Ticket closed: Picked Up\" in Audit History")
     public TicketPage checkPickedUpHistory() {
-        $("#table_body").shouldHave(text("Ticket closed: Picked up"));
+        $("#table_body").shouldHave(text("Ticket closed: Picked Up"));
         return this;
     }
 
-    @Step("Check text \"Drop off sent\" in Audit History")
-    public void checkDropSentHistory() {
-        $("#table_body").shouldHave(text("Drop off sent"));
-    }
-
-    @Step("Check Status Ready for Pick up")
+    @Step("Status Ready for Pick up")
     public TicketPage checkStatusRFPU() {
         $x(".//div[@class=' d-flex align-items-center flex-row justify-content-end me-5']").shouldHave(text("Pending Pick Up"));
         return this;
     }
 
-    @Step("Check Status In Progress")
-    public TicketPage checkStatusInProgress() {
+    @Step("Status In Progress")
+    public void checkStatusInProgress() {
         $x(".//div[@class=' d-flex align-items-center flex-row justify-content-end me-5']").shouldHave(text("In-Progress"));
-        return this;
     }
 
     public void clickProceedToPayment() {
         $x(".//a[@class='btn btn-light-success w-100 mb-5']").click();
+//        $("#payment-process-btn").click();
+//        $x("//*[@id=\"kt_wrapper\"]/div[2]/div/div/div[3]/div/div/a[1]").click();
     }
 
     public TicketPage clickWatch() {
@@ -100,7 +94,7 @@ public class TicketPage extends BasePage {
         $x(".//span[@class='align-self-center badge badge-light-primary']").shouldHave(text("Watching"));
     }
 
-    @Step("Check alert {An unpaid ticket cannot be completed}")
+    @Step("alert {An unpaid ticket cannot be completed}")
     public void checkErrorPickedUp(){
         $("#toast-container").shouldHave(text("An unpaid ticket cannot be completed"));
     }

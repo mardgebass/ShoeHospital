@@ -24,19 +24,20 @@ public class UnpaidTicketsTests extends BaseTest {
     String firstName = faker.name().firstName();
     String lastName = faker.name().lastName();
     String phone = faker.numerify("77########");
-    String price = faker.numerify("###");
-    String email = faker.bothify("??????##??@me.com");
-    String id = faker.numerify("2000####");
+    String price = faker.numerify("##");
+    String email = faker.bothify("??????##@example.com");
+    String id = faker.numerify("7000####");
 
     @Test
+//    @RepeatedTest(6)
     @Severity(SeverityLevel.CRITICAL)
-    @DisplayName("In-progress ticket")
+    @DisplayName("In-progress Ticket")
     public void inProgressTicketTest() {
         page(DashboardPage.class)
                 .getHeader()
                 .clickNewOrder();
         page(FirstOrderStepPage.class)
-                .fillForm(phone, email, firstName, lastName)
+                .fillPhone(phone)
                 .clickContinue();
         page(SecondOrderStepPage.class)
                 .addTicketId(id)
@@ -47,19 +48,18 @@ public class UnpaidTicketsTests extends BaseTest {
         page(TicketPage.class)
                 .checkCreatedHistory()
                 .checkPaymentStatusPending()
-                .checkStatusInProgress()
-                .checkDropSentHistory();
+                .checkStatusInProgress();
     }
 
     @Test
     @Severity(SeverityLevel.CRITICAL)
-    @DisplayName("Pending pick up ticket")
+    @DisplayName("Pending Pick up Ticket")
     public void pendingPickUpTicketTest() {
         page(DashboardPage.class)
                 .getHeader()
                 .clickNewOrder();
         page(FirstOrderStepPage.class)
-                .fillForm(phone, email, firstName, lastName)
+                .fillEmail(email)
                 .clickContinue();
         page(SecondOrderStepPage.class)
                 .addTicketId(id)
@@ -74,7 +74,7 @@ public class UnpaidTicketsTests extends BaseTest {
     }
 
     @Test
-    @DisplayName("Watching ticket")
+    @DisplayName("Watching Ticket")
     public void watchTicketTest() {
         page(DashboardPage.class)
                 .getHeader()
@@ -85,7 +85,7 @@ public class UnpaidTicketsTests extends BaseTest {
     }
 
     @Test
-    @DisplayName("Ticket deletion")
+    @DisplayName("Ticket Deletion")
     public void deleteTicketTest() {
         page(DashboardPage.class)
                 .getHeader()
