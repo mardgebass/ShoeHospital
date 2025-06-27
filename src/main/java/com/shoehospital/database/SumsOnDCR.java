@@ -17,17 +17,18 @@ public class SumsOnDCR {
     private static final String REQUEST_TOTAL_COST = "SELECT SUM(a.total_cost) FROM payment_positions a join payments b on a.payment_id = b.id WHERE ";
 
     public static String fromDateTime() {
-        String from = $x("/html/body/div[1]/div/div/div[2]/div[1]/form/div[1]/div[2]/div/u[1]").innerText();
+        String from = $x(".//div[contains(text(), 'All transactions between')]/u[1]").innerText();
+
         return convertDateTime(from);
     }
 
     public static String toDateTime() {
-        String to = $x("/html/body/div[1]/div/div/div[2]/div[1]/form/div[1]/div[2]/div/u[2]").innerText();
+        String to = $x(".//div[contains(text(), 'All transactions between')]/u[2]").innerText();
         return convertDateTime(to);
     }
 
     public static String dcrDay() {
-        String day = $x("/html/body/div[1]/div/div/div[2]/div[1]/div/div[1]/h1").innerText();
+        String day = $x(".//div[@class='card-title']/h1").innerText();
         String x = day.substring(18);
 
         SimpleDateFormat originalFormat = new SimpleDateFormat("MM/dd/yyyy");
@@ -79,12 +80,11 @@ public class SumsOnDCR {
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(query)) {
 
-            if (resultSet.next()) {
-                String value = resultSet.getString(columnLabel);
-                return value == null ? "0.00" : String.format(Locale.ENGLISH, "%(.2f", Double.parseDouble(value));
-            } else {
-                return "0.00";
-            }
+            return resultSet.next()
+                ?  String.format(Locale.ENGLISH, "%(.2f", Double.parseDouble(
+                        resultSet.getString(columnLabel) == null ? "0.00" : resultSet.getString(columnLabel)))
+             : "0.00";
+
         } catch (SQLException e) {
             e.printStackTrace();
             return "0.00";

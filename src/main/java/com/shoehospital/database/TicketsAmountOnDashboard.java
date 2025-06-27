@@ -41,8 +41,15 @@ public class TicketsAmountOnDashboard {
         return resultValue;
     }
 
+//    public static String getToday() {
+//        return getDataBaseValue(requestCommon + " and DATE(created_at) = CURDATE()");
+//    }
+
+    // Get the count of tickets created today, converted to Austin time
     public static String getToday() {
-        return getDataBaseValue(requestCommon + " and DATE(created_at) = CURDATE()");
+        // Modify SQL query to work with local Austin time
+        String sql = requestCommon + " AND DATE(CONVERT_TZ(created_at, 'UTC', 'America/Chicago')) = DATE(CONVERT_TZ(CURRENT_DATE(), 'UTC', 'America/Chicago'))";
+        return getDataBaseValue(sql);
     }
 
     public static String getOnShelf() {
@@ -54,6 +61,6 @@ public class TicketsAmountOnDashboard {
     }
 
     public static String getWithoutDetails() {
-        return getDataBaseValue(requestCommon + " and ticket_details_id IS NULL and (status = 'In-Progress' or status = 'Dye in Houston')");
+        return getDataBaseValue(requestCommon + " and ticket_details_id IS NULL and (status = 'In-Progress' or status = 'Dye in Houston' or status = 'Repaired') and drop_off_date between adddate(now(), INTERVAL -30 DAY) and now()");
     }
 }

@@ -16,7 +16,8 @@ public class AveragePriceOnDashboard {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection connection = DriverManager.getConnection(TestConfigDB.testConfig.url(), TestConfigDB.testConfig.user(), TestConfigDB.testConfig.password());
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT estimation_cost FROM app.tickets WHERE store_id = " + TestConfigDB.testConfig.storeId() + " AND (drop_off_date between adddate(now(),-7) and now()) and estimation_cost <> 0 and canceled = 0");
+            ResultSet resultSet = statement.executeQuery("SELECT estimation_cost FROM app.tickets WHERE store_id = " + TestConfigDB.testConfig.storeId() +
+                    " AND drop_off_date BETWEEN ADDDATE(CONVERT_TZ(NOW(), 'UTC', 'America/Chicago'), -7) AND CONVERT_TZ(NOW(), 'UTC', 'America/Chicago') AND estimation_cost <> 0 AND canceled = 0");
 
             List<Double> costs = new ArrayList<>();
             while (resultSet.next()) {
