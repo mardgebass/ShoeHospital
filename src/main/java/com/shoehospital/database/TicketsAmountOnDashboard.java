@@ -41,13 +41,7 @@ public class TicketsAmountOnDashboard {
         return resultValue;
     }
 
-//    public static String getToday() {
-//        return getDataBaseValue(requestCommon + " and DATE(created_at) = CURDATE()");
-//    }
-
-    // Get the count of tickets created today, converted to Austin time
     public static String getToday() {
-        // Modify SQL query to work with local Austin time
         String sql = requestCommon + " AND DATE(CONVERT_TZ(created_at, 'UTC', 'America/Chicago')) = DATE(CONVERT_TZ(CURRENT_DATE(), 'UTC', 'America/Chicago'))";
         return getDataBaseValue(sql);
     }
