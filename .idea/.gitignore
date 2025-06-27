@@ -1,9 +1,0 @@
-# Default ignored files
-
-/target/
-/build/
-/allure-results/
-/allure-report/
-/.idea/
-/src/main/resources/
-/src/test/resources/
